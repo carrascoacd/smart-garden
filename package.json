@@ -1,0 +1,30 @@
+{
+  "name": "smart-garden",
+  "version": "1.0.0",
+  "description": "A smart garden server to manage some parameters",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha --recursive --reporter spec --timeout 5000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carrascoacd/smart-garden.git"
+  },
+  "author": "Antonio Carrasco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carrascoacd/smart-garden/issues"
+  },
+  "homepage": "https://github.com/carrascoacd/smart-garden#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "mongoose": "^4.4.6",
+    "dotenv": "^2.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mitm": "^1.2.0",
+    "mocha": "^2.4.5",
+    "supertest": "^1.2.0"
+  }
+}
