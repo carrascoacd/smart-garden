@@ -1,5 +1,5 @@
-# dalia 
-A lightweight smart server to manage a garden remotely 
+# smart-garden 
+A lightweight smart server to manage a garden remotely with arduino
 
 ### Install NPM dependencies
 ``` npm install ```
