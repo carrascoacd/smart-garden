@@ -39,8 +39,8 @@ app.get('/', homeController.index);
 /**
  * Start Express server.
  */
-app.listen(3421, function () {
-  console.log('Example app listening on port 3421!');
+app.listen(process.env.PORT, function () {
+  console.log('Example app listening on port: ' + process.env.PORT);
 });
 
 module.exports = app;
