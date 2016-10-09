@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/carrascoacd/smart-garden#readme",
   "dependencies": {
+    "dotenv": "^2.0.0",
     "express": "^4.13.4",
-    "mongoose": "^4.4.6",
-    "dotenv": "^2.0.0"
+    "mongoose": "^4.4.6"
   },
   "devDependencies": {
     "chai": "^3.5.0",

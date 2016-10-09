@@ -3,5 +3,5 @@
  * Home page.
  */
 exports.index = function(req, res) {
-  res.send('Hello smart gardener!');
+  res.json({"date" : Date.now()});
 };
