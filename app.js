@@ -34,7 +34,8 @@ mongoose.connection.on('error', function() {
 /**
  * Primary app routes.
  */
-app.get('/', homeController.index);
+app.get('/', homeController.getIndex);
+app.post('/', homeController.postIndex);
 
 /**
  * Start Express server.

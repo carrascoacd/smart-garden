@@ -2,6 +2,14 @@
  * GET /
  * Home page.
  */
-exports.index = function(req, res) {
+exports.getIndex = function(req, res) {
+  res.json({"date" : Date.now()});
+};
+
+/**
+ * POST /
+ * Home page.
+ */
+exports.postIndex = function(req, res) {
   res.json({"date" : Date.now()});
 };
