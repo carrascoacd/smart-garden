@@ -25,7 +25,6 @@ var homeController = require('./controllers/home');
  */
 var app = express();
 
-
 /**
  * Connect to MongoDB.
  */
@@ -39,7 +38,7 @@ mongoose.connection.on('error', function() {
  * Primary app routes.
  */
 
-var jsonParser = bodyParser.json()
+var jsonParser = bodyParser.json({ type: '*/*' })
 
 app.get('/', homeController.getIndex);
 app.post('/', jsonParser, homeController.postIndex);
