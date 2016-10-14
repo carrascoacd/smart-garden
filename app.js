@@ -2,7 +2,6 @@
  * Module dependencies.
  */
 var express = require('express');
-var dotenv = require('dotenv');
 var mongoose = require('mongoose');
 
 /**
@@ -10,7 +9,10 @@ var mongoose = require('mongoose');
  *
  * Default path: .env (You can remove the path argument entirely, after renaming `.env.example` to `.env`)
  */
-dotenv.load({ path: '.env' });
+
+if ((process.env.NODE_ENV || 'development') === 'development') {
+  require('dotenv').load({ path: '.env' });
+} 
 
 /**
  * Controllers (route handlers).
@@ -25,7 +27,7 @@ var app = express();
 /**
  * Connect to MongoDB.
  */
-mongoose.connect(process.env.MONGODB || process.env.MONGOLAB_URI);
+mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on('error', function() {
     console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
     process.exit(1);
