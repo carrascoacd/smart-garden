@@ -12,5 +12,6 @@ exports.getIndex = function(req, res) {
  */
 exports.postIndex = function(req, res) {
   if (!req.body) return res.sendStatus(400)
+  console.log(req.body);
   res.json({"date" : Date.now(), "name": req.body.name || "unnamed"});
 };
