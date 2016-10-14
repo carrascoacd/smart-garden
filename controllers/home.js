@@ -11,5 +11,6 @@ exports.getIndex = function(req, res) {
  * Home page.
  */
 exports.postIndex = function(req, res) {
-  res.json({"date" : Date.now()});
+  if (!req.body) return res.sendStatus(400)
+  res.json({"date" : Date.now(), "name": req.body.name || "unnamed"});
 };

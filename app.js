@@ -3,6 +3,7 @@
  */
 var express = require('express');
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser')
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -24,6 +25,7 @@ var homeController = require('./controllers/home');
  */
 var app = express();
 
+
 /**
  * Connect to MongoDB.
  */
@@ -36,8 +38,11 @@ mongoose.connection.on('error', function() {
 /**
  * Primary app routes.
  */
+
+var jsonParser = bodyParser.json()
+
 app.get('/', homeController.getIndex);
-app.post('/', homeController.postIndex);
+app.post('/', jsonParser, homeController.postIndex);
 
 /**
  * Start Express server.
