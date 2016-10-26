@@ -1,17 +1,18 @@
+var components = require('../public/components.js')
+  , React = require('react')
+  , ReactDOM = require('react-dom/server')
+  , WeatherEntry = require('../models/weather_entry.js')
+
 /**
  * GET /
  * Home page.
  */
 exports.getIndex = function(req, res) {
-  res.json({"date" : Date.now()});
-};
+  var WeatheEntryList = React.createFactory(components.WeatheEntryList);
+  WeatherEntry.find({}, function(err, result) {
+    res.render('index', {
+      react: ReactDOM.renderToString(WeatheEntryList({weatherEntryList: result}))
+    })
+  });
 
-/**
- * POST /
- * Home page.
- */
-exports.postIndex = function(req, res) {
-  if (!req.body) return res.sendStatus(400)
-  console.log(req.body);
-  res.json({"date" : Date.now(), "name": req.body.name || "unnamed"});
 };

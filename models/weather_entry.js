@@ -1,7 +1,10 @@
 var mongoose = require('mongoose');
 
 var weatherEntrySchema = new mongoose.Schema({
-  moisture: Number
+  moisture: {
+    type: Number,
+    required: true
+  }
 }, { timestamps: true });
 
 

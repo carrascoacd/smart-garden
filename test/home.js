@@ -8,11 +8,3 @@ describe('GET /', function() {
       .expect(200, done);
   });
 });
-
-describe('POST /', function() {
-  it('should return 200 OK', function(done) {
-    request(app)
-      .post('/')
-      .expect(200, done);
-  });
-});
