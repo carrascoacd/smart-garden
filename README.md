@@ -8,10 +8,10 @@ A lightweight smart server to manage a garden remotely with arduino
 ``` mongod ```
 
 ### Run the server
-``` node app.js ```
+``` npm start ```
 
 ### Run the tests
-``` mocha --recursive```
+``` npm test ```
 
 ### Install a new development dependency
 ``` npm install <module> --save-dev ```
@@ -19,6 +19,7 @@ A lightweight smart server to manage a garden remotely with arduino
 ### Install a new production dependency
 ``` npm install <module> --save ```
 
-### Project layout based on:
+### In order to set up the project for production environments
+``` npm run build ```
+``` npm run serve ```
 
- * [hackathon-starter](https://github.com/sahat/hackathon-starter)
