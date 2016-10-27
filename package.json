@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha --recursive --reporter spec --timeout 5000",
-    "start": "babel-node lib/app.js --presets es2015,react",
-    "build": "babel lib -d dist --presets es2015,react",
+    "start": "babel-node lib/app.js",
+    "build": "babel lib -d dist && cp -r lib/views dist/views",
     "serve": "node dist/app.js"
   },
   "repository": {
