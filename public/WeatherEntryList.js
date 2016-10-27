@@ -17,9 +17,3 @@ export default class WeatheEntryList extends React.Component {
     );
   }
 }
-
-// https://scotch.io/tutorials/react-on-the-server-for-beginners-build-a-universal-react-and-node-app
-
-// if (typeof exports !== 'undefined'){
-//   exports.WeatheEntryList = WeatheEntryList
-// }
