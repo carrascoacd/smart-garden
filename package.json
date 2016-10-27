@@ -4,7 +4,7 @@
   "description": "A smart garden server to manage some parameters",
   "main": "app.js",
   "scripts": {
-    "test": "mocha --recursive --reporter spec --timeout 5000",
+    "test": "mocha --recursive --compilers js:babel-register",
     "start": "babel-node lib/app.js",
     "build": "babel lib -d dist && cp -r lib/views dist/views",
     "serve": "node dist/app.js"
@@ -20,9 +20,6 @@
   },
   "homepage": "https://github.com/carrascoacd/smart-garden#readme",
   "dependencies": {
-    "babel-core": "^6.18.0",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-react": "^6.16.0",
     "body-parser": "^1.15.2",
     "express": "^4.13.4",
     "mongoose": "^4.4.6",
@@ -33,6 +30,7 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
     "chai": "^3.5.0",
     "dotenv": "^2.0.0",
     "mitm": "^1.2.0",

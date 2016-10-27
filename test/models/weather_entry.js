@@ -1,6 +1,6 @@
 const chai = require('chai');
 const expect = chai.expect;
-const WeatherEntry = require('../../models/weather_entry.js');
+const WeatherEntry = require('../../lib/models/weather_entry.js');
 
 describe('WeatherEntry Model', () => {
 
