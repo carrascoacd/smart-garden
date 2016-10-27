@@ -5,10 +5,11 @@ require('babel-core/register')({
     presets: ['es2015', 'react']
 })
 
-var express = require('express')
-  , app = express()
-  , mongoose = require('mongoose')
-  , bodyParser = require('body-parser')
+var express = require('express');
+var app = express();
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var browserify = require('browserify-middleware');
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -47,6 +48,9 @@ mongoose.connection.on('error', function() {
  */
 
 var jsonParser = bodyParser.json({ type: '*/*' })
+
+// Make 'require' avaiable in the browser
+app.get('/js/bundle.js', browserify(["react"]));
 
 app.get('/', homeController.getIndex);
 app.get('/api', apiController.getIndex);
