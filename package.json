@@ -5,9 +5,10 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha --recursive --compilers js:babel-register",
-    "start": "babel-node lib/app.js",
-    "build": "babel lib -d dist && cp -r lib/views dist/views",
-    "serve": "node dist/app.js"
+    "webpack-watch": "webpack -w",
+    "serve": "node ./lib/app",
+    "dev": "concurrent --kill-others \"npm run webpack-watch\" \"npm run serve\"",
+    "build": "webpack --config webpack.config.js --progress --profile --colors"
   },
   "repository": {
     "type": "git",
@@ -20,11 +21,6 @@
   },
   "homepage": "https://github.com/carrascoacd/smart-garden#readme",
   "dependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-react": "^6.16.0",
-    "babel-register": "^6.18.0",
-    "babel-preset-stage-1": "^6.16.0",
     "body-parser": "^1.15.2",
     "express": "^4.13.4",
     "material-ui": "^0.16.1",
@@ -36,9 +32,16 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "concurrently": "^3.1.0",
     "dotenv": "^2.0.0",
     "mitm": "^1.2.0",
     "mocha": "^2.4.5",
-    "supertest": "^1.2.0"
+    "supertest": "^1.2.0",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.7",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-1": "^6.16.0",
+    "webpack": "^1.13.3"
   }
 }
