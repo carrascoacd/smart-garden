@@ -1,6 +1,7 @@
 import React from 'react';
 import Slider from 'material-ui/Slider';
 import TimePicker from 'material-ui/TimePicker';
+import DatePicker from 'material-ui/DatePicker';
 import TextField from 'material-ui/TextField';
 
 /**
@@ -17,26 +18,31 @@ export default class RunIntervalForm extends React.Component {
     };
   }
 
-  handleFirstSlider(event, value) {
+  handleFirstSlider = (event, value) => {
     this.setState({firstSlider: value});
   };
 
-  handleSecondSlider(event, value) {
+  handleSecondSlider = (event, value) => {
     this.setState({secondSlider: value});
   };
+
 
   render() {
     return (
       <div>
         <p>
-          <span>{'The value of the first slider is: '}</span>
+          <span>{'Each '}</span>
           <span>{this.state.firstSlider}</span>
-          <span>{' - The value of the second slider is: '}</span>
+          <span>{' hours and '}</span>
           <span>{this.state.secondSlider}</span>
+          <span>{' minutes'}</span>
         </p>
-        <Slider value={this.state.firstSlider} min={1} max={72} onChange={this.handleFirstSlider} />
-        <Slider value={this.state.secondSlider} min={1} max={72} onChange={this.handleSecondSlider} />
-        <TimePicker hintText="12hr Format" />
+        <Slider value={this.state.firstSlider} min={0} max={72} step={1} onChange={this.handleFirstSlider} />
+        <Slider value={this.state.secondSlider} min={0} max={120} step={1} onChange={this.handleSecondSlider} />
+        <span><DatePicker hintText="Start date"/></span>
+        <span><TimePicker hintText="Start time"/></span>
+        <span><DatePicker hintText="End date"/></span>
+        <span><TimePicker hintText="End time"/></span>
       </div>
     );
   }

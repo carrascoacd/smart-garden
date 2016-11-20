@@ -7,11 +7,11 @@ A lightweight smart server to manage a garden remotely with arduino
 ### Start MongoDB
 ``` mongod ```
 
-### Run the server
-``` npm start ```
+### Run the server in development mode
+``` npm run dev ```
 
 ### Run the tests
-``` npm test ```
+``` npm run test ```
 
 ### Install a new development dependency
 ``` npm install <module> --save-dev ```
