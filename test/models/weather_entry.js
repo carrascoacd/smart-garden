@@ -1,3 +1,5 @@
+require('./base.js')
+
 const chai = require('chai');
 const expect = chai.expect;
 const WeatherEntry = require('../../lib/models/weather_entry.js');
