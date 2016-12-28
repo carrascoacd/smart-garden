@@ -8,11 +8,13 @@ describe('WeatherEntry Model', () => {
 
   it('should create a new weatherEntry', (done) => {
     const weatherEntry = new WeatherEntry({
-      moisture: 600
+      moisture: 600,
+      batteryVoltage: 6
     });
     weatherEntry.save((err) => {
       expect(err).to.be.null;
       expect(weatherEntry.moisture).to.equal(600);
+      expect(weatherEntry.batteryVoltage).to.equal(6);
       expect(weatherEntry).to.have.property('createdAt');
       expect(weatherEntry).to.have.property('updatedAt');
       done();
