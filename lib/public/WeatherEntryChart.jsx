@@ -1,38 +1,30 @@
-import {LineChart} from 'react-d3-basic';
+import {AreaChart} from 'react-easy-chart';
 import React from 'react';
 
-const chartData = []
-for (var i = 1; i < 30; ++i){
-  chartData.push({"index":i, "moisture":Math.random()})
-}
 
-const chartSeries = [
-  {
-    field: 'moisture',
-    name: 'Moisture evolution',
-    color: '#ff7f0e'
-  }
-]
-
-const xAccessor = function(d) {
-  return d.index;
+const center = {
+  textAlign: 'center'
 }
 
 export default class WeatherEntryChart extends React.Component {
 
-  static getDefaultProps(){
-    console.log("asfdg")
-  }
-
   render() {
-    return ( 
-      <LineChart
-        width= {700}
-        height= {300}
-        data= {chartData}
-        chartSeries= {chartSeries}
-        x= {xAccessor}
-      />
+    return (
+      <div style={center}>
+        <AreaChart
+          xType={'time'}
+          axes
+          dataPoints
+          xTicks={5}
+          yTicks={3}
+          grid
+          tickTimeDisplayFormat={'%d %m %y'}
+          interpolate={'cardinal'}
+          width={800}
+          height={250}
+          data={this.props.weatherEntryList}
+        />
+      </div>
     );
   }
 }

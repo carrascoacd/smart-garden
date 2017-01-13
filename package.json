@@ -32,8 +32,8 @@
     "mongoose": "^4.4.6",
     "pug": "^2.0.0-beta6",
     "react": "^15.3.2",
-    "react-d3-basic": "^1.6.11",
     "react-dom": "^15.3.2",
+    "react-easy-chart": "^0.1.12",
     "react-tap-event-plugin": "^1.0.0",
     "webpack": "^1.13.3"
   },
