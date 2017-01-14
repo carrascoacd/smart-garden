@@ -4,10 +4,10 @@
   "description": "A smart garden server to manage some parameters",
   "main": "app.js",
   "scripts": {
-    "test": "mocha --recursive --compilers js:babel-core/register",
+    "test": "NODE_ENV=test mocha --recursive --compilers js:babel-core/register",
     "webpack-watch": "webpack -w",
     "serve": "node ./lib/app",
-    "dev": "concurrent --kill-others \"npm run webpack-watch\" \"npm run serve\"",
+    "dev": "NODE_ENV=development concurrently --kill-others \"npm run webpack-watch\" \"npm run serve\"",
     "build": "webpack --config webpack.config.js --progress --profile --colors"
   },
   "repository": {
