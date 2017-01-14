@@ -6,7 +6,7 @@ const center = {
   textAlign: 'center'
 }
 
-export default class WeatherEntryChart extends React.Component {
+export default class DevicesChart extends React.Component {
 
   constructor(props) {
     super(props);
@@ -16,14 +16,14 @@ export default class WeatherEntryChart extends React.Component {
   }
 
   componentDidMount() {
-    this.getWeatherEntryList()
+    this.getDeviceList()
   }
 
-  getWeatherEntryList(){
+  getDeviceList(){
     fetch('/api').then((response)=>{
       return response.json();
     }).then((data)=>{
-      var chartData = this.generateUniqueChartData(data.weatherEntryList)
+      var chartData = this.generateUniqueChartData(data.deviceList)
       this.setState({data : chartData})
       console.log(data)
     }).catch((err)=>{
@@ -31,12 +31,13 @@ export default class WeatherEntryChart extends React.Component {
     });
   }
 
-  generateUniqueChartData(weatherEntryList){
-    var chartData = _.map(weatherEntryList, function(weatherEntryChart){
-      return _.map(weatherEntryChart, function(entry){
+  generateUniqueChartData(deviceList){
+    var chartData = _.map(deviceList, function(device){
+      return _.map(device.weatherEntries, function(entry){
         return {x: entry.createdAt, y: entry.moisture}
       })
-    })    
+    })
+    console.log(chartData)
     return chartData
   }
 
@@ -49,7 +50,7 @@ export default class WeatherEntryChart extends React.Component {
           dataPoints
           yTicks={3}
           grid
-          datePattern={'%Y-%m-%dT%H:%M:%S'}
+          datePattern={'%Y-%m-%dT%H:%M:%S.%LZ'}
           areaColors={['black', 'purple']}
           tickTimeDisplayFormat={'%m-%d %H'}
           interpolate={'cardinal'}

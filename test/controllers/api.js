@@ -14,7 +14,7 @@ describe('POST /api', function() {
     request(app)
       .post('/api')
       .type('json')
-      .send({weatherEntries:[{moisture: 500}], voltage: 5, name: 'Device 002'})
+      .send([{weatherEntries:[{moisture: 500, currentVoltage: 5}], name: 'Device 002'}])
       .expect(200, done);
   });
 });
@@ -24,7 +24,7 @@ describe('POST /api', function() {
     request(app)
       .post('/api')
       .type('json')
-      .send({weatherEntries:[{moisture: 100}], voltage: 5, name: 'Device 002'})
+      .send([{weatherEntries:[{moisture: 100, currentVoltage: 5}], name: 'Device 002'}])
       .expect(200, done);
   });
 });
