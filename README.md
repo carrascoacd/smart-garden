@@ -23,3 +23,5 @@ A lightweight smart server to manage a garden remotely with arduino
 ``` npm run build ```
 ``` npm run serve ```
 
+### In order to seed the database use: node-mongo-seeds
+``` seed ```
