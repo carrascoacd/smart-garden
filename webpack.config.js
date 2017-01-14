@@ -1,5 +1,15 @@
+var webpack = require("webpack");
+
 module.exports = {
-  entry: ['whatwg-fetch', './lib/public/App.jsx'],
+  entry: {
+    app: ['whatwg-fetch', './lib/public/App.jsx'],
+    // vendor: ["vendor-library"]
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      _: "underscore"
+    })
+  ],
   output: {
     path: './public',
     filename: 'bundle.js'       

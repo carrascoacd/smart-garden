@@ -41,6 +41,7 @@
     "react-easy-chart": "^0.1.12",
     "react-faux-dom": "^2.5.0",
     "react-tap-event-plugin": "^2.0.1",
+    "underscore": "^1.8.3",
     "webpack": "^1.13.3",
     "whatwg-fetch": "^2.0.1"
   },

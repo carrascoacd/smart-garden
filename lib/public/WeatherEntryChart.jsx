@@ -23,11 +23,21 @@ export default class WeatherEntryChart extends React.Component {
     fetch('/api').then((response)=>{
       return response.json();
     }).then((data)=>{
-      this.setState({data : data.weatherEntryList})
+      var chartData = this.generateUniqueChartData(data.weatherEntryList)
+      this.setState({data : chartData})
       console.log(data)
     }).catch((err)=>{
-      console.log("There has been an error");
+      console.log(err);
     });
+  }
+
+  generateUniqueChartData(weatherEntryList){
+    var chartData = _.map(weatherEntryList, function(weatherEntryChart){
+      return _.map(weatherEntryChart, function(entry){
+        return {x: entry.createdAt, y: entry.moisture}
+      })
+    })    
+    return chartData
   }
 
   render() {
@@ -37,13 +47,14 @@ export default class WeatherEntryChart extends React.Component {
           xType={'time'}
           axes
           dataPoints
-          xTicks={5}
           yTicks={3}
           grid
-          tickTimeDisplayFormat={'%Y-%m-%dT%H:%M:%S.%LZ'}
+          datePattern={'%Y-%m-%dT%H:%M:%S'}
+          areaColors={['black', 'purple']}
+          tickTimeDisplayFormat={'%m-%d %H'}
           interpolate={'cardinal'}
-          width={800}
-          height={250}
+          width={1200}
+          height={400}
           data={this.state.data}
         />
       </div>
