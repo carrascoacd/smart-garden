@@ -21,7 +21,7 @@ export default class DeviceCharts extends React.Component {
   }
 
   getDeviceList(){
-    fetch('/api').then((response)=>{
+    fetch('/api/devices').then((response)=>{
       return response.json();
     }).then((data)=>{
       var moistureData = this.generateMoistureChartData(data.deviceList)
