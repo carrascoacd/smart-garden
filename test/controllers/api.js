@@ -1,10 +1,20 @@
 var request = require('supertest');
 var app = require('../../lib/app.js');
 
-describe('GET /api/timing', function() {
+describe('GET /api/run-interval', function() {
   it('should return 200 OK', function(done) {
     request(app)
-      .get('/api/timing')
+      .get('/api/run-interval')
+      .expect(200, done);
+  });
+});
+
+describe('POST /api/run-interval', function() {
+  it('should return 200 OK', function(done) {
+    request(app)
+      .post('/api/run-interval')
+      .type('json')
+      .send({value: 5000})
       .expect(200, done);
   });
 });
