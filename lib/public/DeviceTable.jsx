@@ -26,9 +26,11 @@ export default class DeviceTable extends React.Component {
 
   render() {
     return (
+
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHeaderColumn>Device Name</TableHeaderColumn>
             <TableHeaderColumn>Created at</TableHeaderColumn>
             <TableHeaderColumn>Moisture</TableHeaderColumn>
             <TableHeaderColumn>Voltage</TableHeaderColumn>
@@ -41,6 +43,7 @@ export default class DeviceTable extends React.Component {
                 device.weatherEntries.map(function(entry){
                   return (
                     <TableRow>
+                      <TableRowColumn>{device.name}</TableRowColumn>
                       <TableRowColumn>{entry.createdAt}</TableRowColumn>
                       <TableRowColumn>{entry.moisture}</TableRowColumn>
                       <TableRowColumn>{entry.currentVoltage}</TableRowColumn>
