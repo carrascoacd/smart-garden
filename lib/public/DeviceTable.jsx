@@ -31,7 +31,7 @@ export default class DeviceTable extends React.Component {
           this.state.deviceList.map(function(device){
             return (
               <Table>
-                <TableHeader>
+                <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                   <TableRow>
                     <TableHeaderColumn>Device: {device.name}</TableHeaderColumn>
                   </TableRow>
@@ -41,12 +41,12 @@ export default class DeviceTable extends React.Component {
                     <TableHeaderColumn>Voltage</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody displayRowCheckbox={false} stripedRows={true}>
                   {
                     device.weatherEntries.slice(0, 10).map(function(entry){
                       return (
                         <TableRow>
-                          <TableRowColumn>{entry.createdAt}</TableRowColumn>
+                          <TableRowColumn>{moment(entry.createdAt).format('dd hh:mm:ss')}</TableRowColumn>
                           <TableRowColumn>{entry.moisture}</TableRowColumn>
                           <TableRowColumn>{entry.currentVoltage}</TableRowColumn>
                         </TableRow>

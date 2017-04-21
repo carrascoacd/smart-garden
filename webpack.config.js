@@ -8,7 +8,10 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
       _: "underscore"
-    })
+    }),
+    new webpack.ProvidePlugin({
+      moment: "moment"
+    }),
   ],
   output: {
     path: './public',
