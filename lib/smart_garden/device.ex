@@ -3,5 +3,6 @@ defmodule SmartGarden.Device do
 
   schema "devices" do
     field :name, :string
+    timestamps
   end
 end
