@@ -20,7 +20,9 @@ defmodule SmartGardenWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", SmartGardenWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", SmartGardenWeb do
+    pipe_through :api
+
+    get "/", DeviceController, :index
+  end
 end
