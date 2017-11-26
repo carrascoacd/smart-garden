@@ -1,4 +1,4 @@
-defmodule SmartGarden.DeviceView do
+defmodule SmartGardenWeb.DeviceView do
   use SmartGardenWeb, :view
 
   def render("index.json", %{devices: devices}) do

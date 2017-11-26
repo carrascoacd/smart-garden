@@ -1,9 +1,9 @@
 defmodule SmartGarden.Interval do
-  use Ecto.Schema
+  use Ecto.Schema, otp_app: :smart_garden
 
   schema "intervals" do
     field :name, :string
     field :value, :float
-    timestamps
+    timestamps()
   end
 end
