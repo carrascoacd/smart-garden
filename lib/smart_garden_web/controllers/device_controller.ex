@@ -5,4 +5,5 @@ defmodule SmartGardenWeb.DeviceController do
     devices = SmartGarden.Repo.all(SmartGarden.Device)
     render conn, "index.json", devices: devices
   end
+
 end
