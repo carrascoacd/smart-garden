@@ -9,7 +9,16 @@ defmodule SmartGardenWeb.DeviceView do
 
   def devices_json(device) do
     %{
-      name: device.name
+      name: device.name,
+      weatherEntries: Enum.map(device.weather_entries, &weather_entry_json/1)
+    }
+  end
+
+  def weather_entry_json(weather_entry) do
+    %{
+      moisture: round(weather_entry.moisture),
+      currentVoltage: 0,
+      createdAt: NaiveDateTime.to_string(weather_entry.inserted_at)
     }
   end
   
