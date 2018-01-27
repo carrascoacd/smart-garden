@@ -24,6 +24,7 @@ defmodule SmartGardenWeb.Router do
     pipe_through :api
     resources "/devices", DeviceController do
       resources "/intervals", IntervalController
+      resources "/weather_entries", WeatherEntriesController
     end
   end
 end
