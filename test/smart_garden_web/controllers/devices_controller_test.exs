@@ -8,7 +8,7 @@ defmodule SmartGardenWeb.DeviceControllerTest do
     conn = get conn, device_path(conn, :index)
 
     assert json_response(conn, 200) == %{
-      "devices" => [%{
+      "deviceList" => [%{
         "name" => "Arduino",
         "weatherEntries" => [%{
           "moisture" => 300,

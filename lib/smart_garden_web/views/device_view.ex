@@ -3,7 +3,7 @@ defmodule SmartGardenWeb.DeviceView do
 
   def render("index.json", %{devices: devices}) do
     %{
-      devices: Enum.map(devices, &devices_json/1)
+      deviceList: Enum.map(devices, &devices_json/1)
     }
   end
 
