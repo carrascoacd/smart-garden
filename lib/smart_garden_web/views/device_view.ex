@@ -12,4 +12,5 @@ defmodule SmartGardenWeb.DeviceView do
       name: device.name
     }
   end
+  
 end

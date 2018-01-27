@@ -9,4 +9,17 @@ defmodule SmartGardenWeb.IntervalView do
     }
   end
 
+  def render("index.json", %{intervals: intervals}) do
+    %{
+      intervals: Enum.map(intervals, &interval_json/1)
+    }
+  end
+
+  def interval_json(interval) do
+    %{
+      name: interval.name,
+      value: round(interval.value)
+    }
+  end
+
 end

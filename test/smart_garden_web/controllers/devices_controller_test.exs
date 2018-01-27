@@ -2,7 +2,7 @@ defmodule SmartGardenWeb.DeviceControllerTest do
   use SmartGardenWeb.ConnCase
 
   test "GET /", %{conn: conn} do
-    SmartGarden.Repo.insert(%SmartGarden.Device{name: "Arduino"})
+    SmartGarden.Repo.insert!(%SmartGarden.Device{name: "Arduino"})
     conn = get conn, device_path(conn, :index)
 
     assert json_response(conn, 200) == %{
@@ -10,6 +10,5 @@ defmodule SmartGardenWeb.DeviceControllerTest do
         "name" => "Arduino",
       }]
     }
-
   end
 end
