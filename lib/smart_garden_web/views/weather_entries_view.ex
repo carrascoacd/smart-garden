@@ -2,6 +2,13 @@ defmodule SmartGardenWeb.WeatherEntriesView do
   
   use SmartGardenWeb, :view
 
+  def render("create.json", %{interval: interval}) do
+    %{
+      value: round(interval.value),
+      action: interval.action
+    }
+  end
+
   def render("show.json", %{weather_entry: weather_entry}) do
     %{
       moisture: round(weather_entry.moisture)

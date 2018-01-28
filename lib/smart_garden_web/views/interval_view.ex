@@ -5,7 +5,8 @@ defmodule SmartGardenWeb.IntervalView do
   def render("show.json", %{interval: interval}) do
     %{
       name: interval.name,
-      value: round(interval.value)
+      value: round(interval.value),
+      action: interval.action
     }
   end
 
@@ -18,7 +19,8 @@ defmodule SmartGardenWeb.IntervalView do
   def interval_json(interval) do
     %{
       name: interval.name,
-      value: round(interval.value)
+      value: round(interval.value),
+      action: interval.action
     }
   end
 

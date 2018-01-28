@@ -8,6 +8,7 @@ defmodule SmartGarden.Interval do
   schema "intervals" do
     field :name, :string
     field :value, :float
+    field :action, :string
     belongs_to :device, SmartGarden.Device
     timestamps()
   end
@@ -21,9 +22,9 @@ defmodule SmartGarden.Interval do
 
   def changeset(%Interval{} = interval, attrs) do
     interval
-    |> cast(attrs, [:name, :value])
-    |> validate_required([:name, :value])
-    |> unique_constraint(:name)
+    |> cast(attrs, [:name, :value, :action])
+    |> validate_required([:name, :value, :action])
+    |> validate_inclusion(:action, ["open-valve", "close-valve", "wait"])
   end
 
 end

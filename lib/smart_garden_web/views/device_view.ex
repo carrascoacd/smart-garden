@@ -7,6 +7,13 @@ defmodule SmartGardenWeb.DeviceView do
     }
   end
 
+  def render("show.json", %{device: device}) do
+    %{
+      name: device.name,
+      id: device.id
+    }
+  end
+
   def devices_json(device) do
     %{
       name: device.name,

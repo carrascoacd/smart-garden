@@ -1,6 +1,9 @@
 defmodule SmartGarden.Device do
   use Ecto.Schema, otp_app: :smart_garden
+  import Ecto.Changeset
   import Ecto.Query, warn: false
+
+  alias SmartGarden.Device
 
   schema "devices" do
     field :name, :string
@@ -14,6 +17,13 @@ defmodule SmartGarden.Device do
       select: d)
     query
       |> SmartGarden.Repo.all
+  end
+
+  def changeset(%Device{} = device, attrs) do
+    device
+    |> cast(attrs, [:name])
+    |> validate_required([:name])
+    |> unique_constraint(:name)
   end
 
 end
