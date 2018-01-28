@@ -1,1 +1,1 @@
-web: npm run build && npm run serve
+web: MIX_ENV=prod mix phx.server
