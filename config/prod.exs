@@ -24,7 +24,7 @@ config :smart_garden, SmartGardenWeb.Endpoint,
 config :logger, level: :info
 
 # Configure your database
-config :smart_garden, SmartGardenWeb.Endpoint,
+config :smart_garden, SmartGardenWeb.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: System.get_env("DATABASE_URL"),
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
