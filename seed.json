@@ -1,5 +1,0 @@
-{
-	"undefined": "mongodb://localhost:27017/smartGarden",
-	"dev": "mongodb://localhost:27017/smartGarden",
-	"prod": "mongodb://localhost:27017/smartGarden"
-}
