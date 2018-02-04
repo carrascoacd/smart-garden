@@ -12,9 +12,9 @@ export default class Layout extends React.Component {
     return (
       <div>
         <DeviceTable/>
-        <MediaQuery query='(min-device-width: 1224px)'>
+        {/* <MediaQuery query='(min-device-width: 1224px)'>
           <DeviceCharts/>
-        </MediaQuery>
+        </MediaQuery> */}
         <BottomNavigationBar />
       </div>
     );

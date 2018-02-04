@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
-import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
 
-const nearbyIcon = <IconLocationOn />;
+const healthIcon = <FontIcon className="material-icons">restore</FontIcon>;
+const manageIcon = <FontIcon className="material-icons">build</FontIcon>;
+
 const style = {
   bottom: '0',
   position: 'fixed',
@@ -30,9 +31,14 @@ export default class BottomNavigationBar extends Component {
       <Paper zDepth={1} style={style}>
         <BottomNavigation selectedIndex={this.state.selectedIndex}>
           <BottomNavigationItem
-            label="Nearby"
-            icon={nearbyIcon}
+            label="Health"
+            icon={healthIcon}
             onTouchTap={() => this.select(0)}
+          />
+          <BottomNavigationItem
+            label="Manage"
+            icon={manageIcon}
+            onTouchTap={() => this.select(1)}
           />
         </BottomNavigation>
       </Paper>
