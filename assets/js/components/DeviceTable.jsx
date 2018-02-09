@@ -28,9 +28,9 @@ export default class DeviceTable extends React.Component {
     return (
       <div>
         {
-          this.state.deviceList.map(function(device){
+          this.state.deviceList.map(function(device, i){
             return (
-              <Table>
+              <Table key={i}>
                 <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                   <TableRow>
                     <TableHeaderColumn>Device: {device.name}</TableHeaderColumn>
@@ -43,9 +43,9 @@ export default class DeviceTable extends React.Component {
                 </TableHeader>
                 <TableBody displayRowCheckbox={false} stripedRows={true}>
                   {
-                    device.weatherEntries.slice(0, 10).map(function(entry){
+                    device.weatherEntries.slice(0, 10).map(function(entry, i){
                       return (
-                        <TableRow>
+                        <TableRow key={i}>
                           <TableRowColumn>{moment(entry.createdAt).format('dd hh:mm:ss')}</TableRowColumn>
                           <TableRowColumn>{entry.moisture}</TableRowColumn>
                           <TableRowColumn>{entry.currentVoltage}</TableRowColumn>

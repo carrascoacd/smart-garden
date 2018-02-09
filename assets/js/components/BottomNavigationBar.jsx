@@ -24,6 +24,7 @@ export default class BottomNavigationBar extends Component {
 
   select(index){
     this.setState({selectedIndex: index});
+    this.props.onTabChange(index);
   } 
 
   render() {
