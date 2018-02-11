@@ -7,11 +7,13 @@ const styles = {
     "alignItems": "center",
     "flexDirection": "column"
   },
-  slider: {
+  horizontalSlider: {
+    width: 250
+  },
+  verticalSlider: {
     height: 250
   },
   value: {
-    "paddingTop": "10px"
   }
 };
 
@@ -24,13 +26,6 @@ export default class IntervalSlider extends Component {
     }
   }
 
-  defaultProps() {
-    return {
-      name: "Slider",
-      unit: "s"
-    }
-  }
-
   handleChange(event, value){
     this.setState({value: value})
   }
@@ -40,21 +35,22 @@ export default class IntervalSlider extends Component {
   }
 
   render(){
+    const sliderStyle = this.props.axis == "x" ? styles.horizontalSlider : styles.verticalSlider;
     return (
       <div style={styles.container}>
+        <div style={styles.value}>{this.props.name} {this.state.value} {this.props.unit}</div>
         <div>
           <Slider 
             min={0}
             max={100}
             step={1}
-            style={styles.slider}
-            axis="y" 
+            axis={this.props.axis}
+            style={sliderStyle}
             defaultValue={50}
             onChange={this.handleChange.bind(this)} 
             onDragStop={this.saveValue.bind(this)}
             />
         </div>
-        <div style={styles.value}>{this.props.name} {this.state.value} {this.props.unit}</div>
       </div>
     )
   }

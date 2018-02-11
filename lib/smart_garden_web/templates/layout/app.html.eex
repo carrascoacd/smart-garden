@@ -7,7 +7,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hello SmartGarden!</title>
+    <%# Launch the web page in full screen when added to home screen in mobile %>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>SmartGarden</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">

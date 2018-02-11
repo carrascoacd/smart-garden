@@ -2,20 +2,19 @@ import React, {Component} from 'react';
 import TimePicker from 'material-ui/TimePicker';
 import IntervalSlider from './IntervalSlider.jsx'
 
-
 const styles = {
   container: {
-    "display": "flex",
-    "alignItems": "center",
-    "flexDirection": "column",
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
   },
   nestedContainer: {
-    "display": "flex",
-    "flexDirection": "row",
-    "width": "256px",
+    display: "flex",
+    flexDirection: "row",
+    width: "300px",
   },
   item: {
-    "flexGrow": 1
+    flexGrow: 1
   }
 }
 
@@ -42,20 +41,20 @@ export default class ManagementTab extends Component {
   render() {
     return (
       <div style={styles.container}>
-        <div style={styles.item}>
-          <TimePicker
-            hintText="Open valve at"
-            onChange={this.setPeriodicity.bind(this)}
-            dialogStyle={{"margin": "-70px auto"}}
-          />
-        </div>
         <div style={styles.nestedContainer}>
           <div style={styles.item}>
-            <IntervalSlider name="Water for" unit="ms" color="blue" />
+            <IntervalSlider name="Water for" unit="ms" axis="y"/>
           </div>
           <div style={styles.item}>
-            <IntervalSlider name="Polling each" unit="ms" color="green" />
+            <IntervalSlider name="Polling each" unit="ms" axis="y"/>
           </div>
+        </div>
+        <div style={{marginTop: "7vh"}}>Open valve at</div>
+        <div style={styles.item}>
+          <TimePicker onChange={this.setPeriodicity.bind(this)} />
+        </div>
+        <div style={styles.item}>
+          <IntervalSlider name="each" unit="hours" axis="x"/>
         </div>
       </div>
     );
