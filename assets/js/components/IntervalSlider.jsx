@@ -8,7 +8,7 @@ const styles = {
     "flexDirection": "column"
   },
   slider: {
-    "height": 150
+    height: 250
   },
   value: {
     "paddingTop": "10px"
@@ -24,8 +24,19 @@ export default class IntervalSlider extends Component {
     }
   }
 
+  defaultProps() {
+    return {
+      name: "Slider",
+      unit: "s"
+    }
+  }
+
   handleChange(event, value){
     this.setState({value: value})
+  }
+
+  saveValue(event, value){
+    console.log("Saving...");
   }
 
   render(){
@@ -36,12 +47,14 @@ export default class IntervalSlider extends Component {
             min={0}
             max={100}
             step={1}
-            style={styles.slider} 
+            style={styles.slider}
             axis="y" 
             defaultValue={50}
-            onChange={this.handleChange.bind(this)} />
+            onChange={this.handleChange.bind(this)} 
+            onDragStop={this.saveValue.bind(this)}
+            />
         </div>
-        <div style={styles.value}>Value {this.state.value}</div>
+        <div style={styles.value}>{this.props.name} {this.state.value} {this.props.unit}</div>
       </div>
     )
   }

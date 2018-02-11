@@ -45,16 +45,16 @@ export default class ManagementTab extends Component {
         <div style={styles.item}>
           <TimePicker
             hintText="Open valve at"
-            dialogBodyStyle={{overflowY: 'auto'}}
             onChange={this.setPeriodicity.bind(this)}
+            dialogStyle={{"margin": "-70px auto"}}
           />
         </div>
         <div style={styles.nestedContainer}>
           <div style={styles.item}>
-            <IntervalSlider />
+            <IntervalSlider name="Water for" unit="ms" color="blue" />
           </div>
           <div style={styles.item}>
-            <IntervalSlider />
+            <IntervalSlider name="Polling each" unit="ms" color="green" />
           </div>
         </div>
       </div>
