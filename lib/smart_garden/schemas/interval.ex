@@ -24,7 +24,7 @@ defmodule SmartGarden.Interval do
     interval
     |> cast(attrs, [:name, :value, :action])
     |> validate_required([:name, :value, :action])
-    |> validate_inclusion(:action, ["open-valve", "close-valve", "wait"])
+    |> validate_inclusion(:action, ["open-valve", "wait-open", "polling"])
   end
 
 end

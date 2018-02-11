@@ -1,14 +1,22 @@
 import React, {Component} from 'react';
 import TimePicker from 'material-ui/TimePicker';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
+import IntervalSlider from './IntervalSlider.jsx'
 
 
-const style = {
-  "display": "flex",
-  "alignItems": "center",
-  "flexDirection": "column"
+const styles = {
+  container: {
+    "display": "flex",
+    "alignItems": "center",
+    "flexDirection": "column",
+  },
+  nestedContainer: {
+    "display": "flex",
+    "flexDirection": "row",
+    "width": "256px",
+  },
+  item: {
+    "flexGrow": 1
+  }
 }
 
 export default class ManagementTab extends Component {
@@ -33,23 +41,22 @@ export default class ManagementTab extends Component {
 
   render() {
     return (
-      <div style={style}>
-        <TimePicker
-          hintText="Periodicity"
-          onChange={this.setPeriodicity.bind(this)}
-        /> 
-        <SelectField
-          floatingLabelText="Action"
-          value={this.state.action}
-          onChange={this.setAction.bind(this)}>
-          <MenuItem value={"open-valve"} primaryText="Open Valve" />
-          <MenuItem value={"close-valve"} primaryText="Close Valve" />
-          <MenuItem value={"wait"} primaryText="Disable" />
-        </SelectField>
-        <RaisedButton 
-          style={{"marginTop": "20px"}}
-          label="Secondary" 
-          secondary={true} />
+      <div style={styles.container}>
+        <div style={styles.item}>
+          <TimePicker
+            hintText="Open valve at"
+            dialogBodyStyle={{overflowY: 'auto'}}
+            onChange={this.setPeriodicity.bind(this)}
+          />
+        </div>
+        <div style={styles.nestedContainer}>
+          <div style={styles.item}>
+            <IntervalSlider />
+          </div>
+          <div style={styles.item}>
+            <IntervalSlider />
+          </div>
+        </div>
       </div>
     );
   }
