@@ -13,13 +13,15 @@ const styles = {
     display: "flex",
     alignItems: "center",
     flexDirection: "column",
+    marginBottom: "100px"
   },
   nestedContainer: {
     display: "flex",
     flexDirection: "column",
   },
   item: {
-    flexGrow: 1
+    flexGrow: 1,
+    width: "276"
   }
 }
 
@@ -55,26 +57,36 @@ export default class ManagementTab extends Component {
   render() {
     return (
       <div style={styles.container}>
-        <List>
+        <List style={styles.item}>
           <Subheader>Polling interval</Subheader>
-          <IntervalSlider name="" unit="ms" axis="x"/>
+          <ListItem>
+            <IntervalSlider maxValue={200} unit="min"/>
+          </ListItem>
         </List>
-        <List>
+        <List style={styles.item}>
           <Subheader>Open valve time</Subheader>
-          <IntervalSlider name="" unit="ms" axis="x"/>
+          <ListItem>
+            <IntervalSlider maxValue={200} unit="min"/>
+          </ListItem>
         </List>
         <Divider />
-        <List>
+        <List style={styles.item}>
+          <Subheader>Open valve hour</Subheader>
+          <ListItem>
+            <TimePicker onChange={this.setPeriodicity.bind(this)} />
+          </ListItem>
+        </List>
+        <Divider />
+        <List style={styles.item}>
           <Subheader>Open valve days</Subheader>
           {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(function(day, i){
             return (
               <ListItem
-              leftCheckbox={<Checkbox
+                leftCheckbox={<Checkbox
                 checkedIcon={<ActionFavorite />}
                 uncheckedIcon={<ActionFavoriteBorder />}
                 label={day}
                 onCheck={this.updateCheck.bind(this)}
-                style={styles.checkbox}
                 key={i}
               />}
             />
@@ -82,30 +94,7 @@ export default class ManagementTab extends Component {
           }.bind(this))
           }
         </List>
-        <Divider />
-        <List>
-          <Subheader>Open valve hour</Subheader>
-          <TimePicker onChange={this.setPeriodicity.bind(this)} />
-        </List>
       </div>
-
-      // <div style={styles.container}>
-      //   <div style={styles.nestedContainer}>
-      //     <div style={styles.item}>
-      //       <IntervalSlider name="Water for" unit="ms" axis="x"/>
-      //     </div>
-      //     <div style={styles.item}>
-      //       <IntervalSlider name="Polling each" unit="ms" axis="x"/>
-      //     </div>
-      //   </div>
-        
-      //   <div style={styles.item}>
-      //     <TimePicker onChange={this.setPeriodicity.bind(this)} />
-      //   </div>
-      //   <div style={styles.item}>
-      //     <WeekSelectBox/>
-      //   </div>
-      // </div>
     );
   }
 }
