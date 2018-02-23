@@ -7,23 +7,25 @@ defmodule SmartGardenWeb.IntervalDeviceControllerTest do
   end
 
   test "create interval", %{conn: conn, device: device} do
-    interval_params = %{name: "water", value: 1000, action: "wait-open"}
+    interval_params = %{name: "water", value: 1000, action: "open-valve", execution_schedule: "* * * * *"}
     conn = post conn, device_interval_path(conn, :create, device.id), interval: interval_params
     assert json_response(conn, 201) == %{
       "name" => "water",
       "value" => 1000,
-      "action" => "wait-open"
+      "action" => "open-valve",
+      "execution_schedule" => "* * * * *"
     }
   end
 
   test "get interval", %{conn: conn, device: device} do
-    changeset = %SmartGarden.Interval{name: "water", value: 1000.0, device: device, action: "close-valve"}
+    changeset = %SmartGarden.Interval{name: "water", value: 1000.0, device: device, action: "open-valve"}
     interval = SmartGarden.Repo.insert!(changeset)
     conn = get conn, device_interval_path(conn, :show, device.id, interval.id)
     assert json_response(conn, 200) == %{
       "name" => "water",
       "value" => 1000,
-      "action" => "close-valve"
+      "action" => "open-valve",
+      "execution_schedule" => nil
     }
   end
 
@@ -35,7 +37,8 @@ defmodule SmartGardenWeb.IntervalDeviceControllerTest do
       %{
         "name" => "water",
         "value" => 1000,
-        "action" => "polling"
+        "action" => "polling",
+        "execution_schedule" => nil
       }
     ]}
   end

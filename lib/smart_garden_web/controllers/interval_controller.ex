@@ -21,8 +21,10 @@ defmodule SmartGardenWeb.IntervalController do
         conn 
           |> put_status(:created) 
           |> render("show.json", interval: interval)
-      {:error, _changeset} ->
-        json conn |> put_status(:bad_request), %{errors: ["unable to create interval"] }
+      {:error, changeset} ->
+        conn 
+          |> put_status(:bad_request)
+          |> render("error.json", changeset: changeset)
     end
   end
 

@@ -3,11 +3,7 @@ defmodule SmartGardenWeb.IntervalView do
   use SmartGardenWeb, :view
 
   def render("show.json", %{interval: interval}) do
-    %{
-      name: interval.name,
-      value: round(interval.value),
-      action: interval.action
-    }
+    interval_json(interval)
   end
 
   def render("index.json", %{intervals: intervals}) do
@@ -16,11 +12,18 @@ defmodule SmartGardenWeb.IntervalView do
     }
   end
 
+  def render("error.json", %{changeset: changeset}) do
+    %{
+      errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)
+    }
+  end
+
   def interval_json(interval) do
     %{
       name: interval.name,
       value: round(interval.value),
-      action: interval.action
+      action: interval.action,
+      execution_schedule: interval.execution_schedule
     }
   end
 
