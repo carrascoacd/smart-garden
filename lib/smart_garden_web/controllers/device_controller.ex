@@ -7,9 +7,11 @@ defmodule SmartGardenWeb.DeviceController do
   end
 
   def show(conn, %{"id" => id}) do
-    device = SmartGarden.Repo.get! SmartGarden.Device, id
-    conn 
-      |> render("show.json", device: device)
+    device = case SmartGarden.Repo.get SmartGarden.Device, id do
+      nil -> SmartGarden.Repo.one SmartGarden.Device
+      device -> device
+    end
+    conn |> render("show.json", device: device)
   end
 
   def create(conn, %{"device" => device_params}) do

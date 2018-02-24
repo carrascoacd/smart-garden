@@ -25,10 +25,20 @@ defmodule SmartGardenWeb.DeviceControllerTest do
     assert json_response(conn, 201)
   end
 
-  test "get device", %{conn: conn} do
+  test "get device by id", %{conn: conn} do
     changeset = %SmartGarden.Device{name: "Arduino device"}
     device = SmartGarden.Repo.insert!(changeset)
     conn = get conn, device_path(conn, :show, device.id)
+    assert json_response(conn, 200) == %{
+      "name" => "Arduino device",
+      "id" => device.id
+    }
+  end
+
+  test "get one device", %{conn: conn} do
+    changeset = %SmartGarden.Device{name: "Arduino device"}
+    device = SmartGarden.Repo.insert!(changeset)
+    conn = get conn, device_path(conn, :show, -1)
     assert json_response(conn, 200) == %{
       "name" => "Arduino device",
       "id" => device.id
