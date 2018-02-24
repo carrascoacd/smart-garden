@@ -8,7 +8,7 @@ defmodule SmartGardenWeb.IntervalController do
   end
 
   def show(conn, %{"device_id" => _device_id, "id" => id}) do
-    interval = SmartGarden.Repo.get SmartGarden.Interval, id
+    interval = SmartGarden.Repo.get! SmartGarden.Interval, id
     conn 
       |> render("show.json", interval: interval)
   end
@@ -20,6 +20,21 @@ defmodule SmartGardenWeb.IntervalController do
       {:ok, interval} ->
         conn 
           |> put_status(:created) 
+          |> render("show.json", interval: interval)
+      {:error, changeset} ->
+        conn 
+          |> put_status(:bad_request)
+          |> render("error.json", changeset: changeset)
+    end
+  end
+
+  def update(conn, %{"device_id" => _device_id, "id" => id, "interval" => interval_params}) do
+    interval = SmartGarden.Repo.get! SmartGarden.Interval, id
+    changeset = SmartGarden.Interval.changeset(interval, interval_params)
+    case SmartGarden.Repo.update(changeset) do
+      {:ok, interval} ->
+        conn 
+          |> put_status(:ok) 
           |> render("show.json", interval: interval)
       {:error, changeset} ->
         conn 

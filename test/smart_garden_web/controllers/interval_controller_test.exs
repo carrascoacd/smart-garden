@@ -43,4 +43,17 @@ defmodule SmartGardenWeb.IntervalDeviceControllerTest do
     ]}
   end
 
+  test "update intervals", %{conn: conn, device: device} do
+    interval_params = %{execution_schedule: "* * * * 5"}
+    changeset = %SmartGarden.Interval{name: "water", value: 1000.0, device: device, action: "polling"}
+    interval = SmartGarden.Repo.insert!(changeset)
+    conn = patch conn, device_interval_path(conn, :update, device.id, interval.id), interval: interval_params
+    assert json_response(conn, 200) == %{
+      "name" => "water",
+      "value" => 1000,
+      "action" => "polling",
+      "execution_schedule" => "* * * * 5"
+    }
+  end
+
 end
