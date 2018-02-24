@@ -8,15 +8,24 @@ defmodule SmartGarden.Device do
   schema "devices" do
     field :name, :string
     has_many :weather_entries, SmartGarden.WeatherEntry
+    # has_many :intervals, SmartGarden.Interval
     timestamps()
   end
 
-  def get_all_with_weather_entries do
-    query = from(d in SmartGarden.Device,
+  def get_all_with_relations do
+    query = from(device in SmartGarden.Device,
       preload: [:weather_entries],
-      select: d)
+      select: device)
     query
       |> SmartGarden.Repo.all
+  end
+
+  def get_one_with_relations do
+    query = from(device in SmartGarden.Device,
+      preload: [:weather_entries],
+      select: device)
+    query 
+      |> SmartGarden.Repo.one
   end
 
   def changeset(%Device{} = device, attrs) do

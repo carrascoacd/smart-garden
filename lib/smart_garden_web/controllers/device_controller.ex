@@ -2,16 +2,14 @@ defmodule SmartGardenWeb.DeviceController do
   use SmartGardenWeb, :controller
 
   def index(conn, _params) do
-    devices = SmartGarden.Device.get_all_with_weather_entries
+    devices = SmartGarden.Device.get_all_with_relations
     render conn, "index.json", devices: devices
   end
 
-  def show(conn, %{"id" => id}) do
-    device = case SmartGarden.Repo.get SmartGarden.Device, id do
-      nil -> SmartGarden.Repo.one SmartGarden.Device
-      device -> device
-    end
-    conn |> render("show.json", device: device)
+  def current(conn, _params) do
+    device = SmartGarden.Device.get_one_with_relations
+    conn |> 
+      render("show.json", device: device)
   end
 
   def create(conn, %{"device" => device_params}) do
@@ -20,7 +18,7 @@ defmodule SmartGardenWeb.DeviceController do
       {:ok, device} ->
         conn 
           |> put_status(:created) 
-          |> render("show.json", device: device)
+          |> render("create.json", device: device)
       {:error, _changeset} ->
         json conn |> put_status(:bad_request), %{errors: ["unable to create "] }
     end

@@ -6,10 +6,10 @@ defmodule SmartGardenWeb.DeviceControllerTest do
     changeset = %SmartGarden.WeatherEntry{moisture: 300.0, device: device}
     weather_entry = SmartGarden.Repo.insert!(changeset)
     conn = get conn, device_path(conn, :index)
-
     assert json_response(conn, 200) == %{
       "deviceList" => [%{
         "name" => "Arduino",
+        "id" => device.id,
         "weatherEntries" => [%{
           "moisture" => 300,
           "currentVoltage" => 0,
@@ -25,23 +25,20 @@ defmodule SmartGardenWeb.DeviceControllerTest do
     assert json_response(conn, 201)
   end
 
-  test "get device by id", %{conn: conn} do
+  test "get current device", %{conn: conn} do
     changeset = %SmartGarden.Device{name: "Arduino device"}
     device = SmartGarden.Repo.insert!(changeset)
-    conn = get conn, device_path(conn, :show, device.id)
+    changeset = %SmartGarden.WeatherEntry{moisture: 300.0, device: device}
+    weather_entry = SmartGarden.Repo.insert!(changeset)
+    conn = get conn, current_device_path(conn, :current)
     assert json_response(conn, 200) == %{
       "name" => "Arduino device",
-      "id" => device.id
-    }
-  end
-
-  test "get one device", %{conn: conn} do
-    changeset = %SmartGarden.Device{name: "Arduino device"}
-    device = SmartGarden.Repo.insert!(changeset)
-    conn = get conn, device_path(conn, :show, -1)
-    assert json_response(conn, 200) == %{
-      "name" => "Arduino device",
-      "id" => device.id
+      "id" => device.id,
+      "weatherEntries" => [%{
+        "moisture" => 300,
+        "currentVoltage" => 0,
+        "createdAt" => NaiveDateTime.to_string weather_entry.inserted_at
+      }]
     }
   end
 

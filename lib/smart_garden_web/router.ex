@@ -26,5 +26,6 @@ defmodule SmartGardenWeb.Router do
       resources "/intervals", IntervalController
       resources "/weather_entries", WeatherEntriesController
     end
+    get "/current/device", DeviceController, :current, as: :current_device
   end
 end
