@@ -46,7 +46,6 @@ export default class DeviceTable extends React.Component {
             <TableRow>
               <TableHeaderColumn>Created at</TableHeaderColumn>
               <TableHeaderColumn>Moisture</TableHeaderColumn>
-              <TableHeaderColumn>Voltage</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false} stripedRows={true}>
@@ -56,7 +55,6 @@ export default class DeviceTable extends React.Component {
                   <TableRow key={i}>
                     <TableRowColumn>{moment(entry.createdAt).format('D/MM/Y - hh:mm')}</TableRowColumn>
                     <TableRowColumn>{entry.moisture}</TableRowColumn>
-                    <TableRowColumn>{entry.currentVoltage}</TableRowColumn>
                   </TableRow>
                 )
               })

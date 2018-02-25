@@ -7,12 +7,12 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
   end
 
   test "create weather_entry", %{conn: conn, device: device} do
-    changeset = %SmartGarden.Interval{name: "Wait 1000", value: 1000.0, action: "wait", device: device}
+    changeset = %SmartGarden.Interval{name: "Wait 1000", value: 1000.0, action: "open-valve", device: device}
     SmartGarden.Repo.insert! changeset
     weather_entry_params = %{moisture: 1000}
     conn = post conn, device_weather_entries_path(conn, :create, device.id), weather_entry: weather_entry_params
     assert json_response(conn, 201) == %{
-      "action" => "wait",
+      "action" => "open-valve",
       "value" => 1000
     }
   end
