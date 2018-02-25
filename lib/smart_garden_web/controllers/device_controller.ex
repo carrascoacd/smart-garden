@@ -7,7 +7,7 @@ defmodule SmartGardenWeb.DeviceController do
   end
 
   def current(conn, _params) do
-    device = SmartGarden.Device.get_one_with_relations
+    device = SmartGarden.Repo.one SmartGarden.Device
     conn |> 
       render("show.json", device: device)
   end

@@ -22,8 +22,8 @@ defmodule SmartGardenWeb.DeviceView do
     %{
       name: device.name,
       id: device.id,
-      weatherEntries: Enum.map(device.weather_entries, &weather_entry_json/1),
-      intervals: Enum.map(device.intervals, &interval_json/1)
+      # weatherEntries: Enum.map(device.weather_entries, &weather_entry_json/1),
+      # intervals: Enum.map(device.intervals, &interval_json/1)
     }
   end
 

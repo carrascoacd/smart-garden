@@ -7,7 +7,7 @@ export default class DashboardTab extends Component {
   render() {
     return (
       <div>
-        <DeviceTable/>
+        <DeviceTable device={this.props.device}/>
         {/* <MediaQuery query='(min-device-width: 1224px)'>
           <DeviceCharts/>
         </MediaQuery> */}

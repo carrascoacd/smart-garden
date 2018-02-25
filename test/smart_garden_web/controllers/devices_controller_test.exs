@@ -27,21 +27,21 @@ defmodule SmartGardenWeb.DeviceControllerTest do
     assert json_response(conn, 200) == expected_response(device, weather_entry, interval)
   end
 
-  def expected_response(device, weather_entry, interval) do
+  def expected_response(device, _weather_entry, _interval) do
     %{
       "name" => device.name,
       "id" => device.id,
-      "weatherEntries" => [%{
-        "moisture" => weather_entry.moisture,
-        "currentVoltage" => 0,
-        "createdAt" => NaiveDateTime.to_string weather_entry.inserted_at
-      }],
-      "intervals" => [%{
-        "name" => interval.name,
-        "value" => interval.value,
-        "action" => interval.action,
-        "execution_schedule" => interval.execution_schedule
-      }]
+      # "weatherEntries" => [%{
+      #   "moisture" => weather_entry.moisture,
+      #   "currentVoltage" => 0,
+      #   "createdAt" => NaiveDateTime.to_string weather_entry.inserted_at
+      # }],
+      # "intervals" => [%{
+      #   "name" => interval.name,
+      #   "value" => interval.value,
+      #   "action" => interval.action,
+      #   "execution_schedule" => interval.execution_schedule
+      # }]
     }
   end
 

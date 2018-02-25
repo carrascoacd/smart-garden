@@ -17,19 +17,19 @@ export default class DeviceTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      deviceList: [],
+      weatherEntries: [],
     }
   }
 
-  componentDidMount() {
-    this.getDeviceList()
+  componentDidMount(){
+    this.getWeatherEntries()
   }
 
-  getDeviceList(){
-    fetch('/api/devices').then((response)=>{
+  getWeatherEntries(){
+    fetch(`/api/devices/${this.props.device.id}/weather_entries`).then((response)=>{
       return response.json();
     }).then((data)=>{
-      this.setState({deviceList : data.deviceList})
+      this.setState({weatherEntries: data})
     }).catch((err)=>{
       console.log(err);
     });
@@ -38,39 +38,33 @@ export default class DeviceTable extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-        {
-          this.state.deviceList.map(function(device, i){
-            return (
-                <Table key={i} fixedHeader={false} style={styles.table}>
-                  <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-                    <TableRow>
-                      <TableHeaderColumn>Device: {device.name}</TableHeaderColumn>
-                    </TableRow>
-                    <TableRow>
-                      <TableHeaderColumn>Created at</TableHeaderColumn>
-                      <TableHeaderColumn>Moisture</TableHeaderColumn>
-                      <TableHeaderColumn>Voltage</TableHeaderColumn>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody displayRowCheckbox={false} stripedRows={true}>
-                    {
-                      device.weatherEntries.slice(0, 10).map(function(entry, i){
-                        return (
-                          <TableRow key={i}>
-                            <TableRowColumn>{moment(entry.createdAt).format('D/MM/Y - hh:mm')}</TableRowColumn>
-                            <TableRowColumn>{entry.moisture}</TableRowColumn>
-                            <TableRowColumn>{entry.currentVoltage}</TableRowColumn>
-                          </TableRow>
-                        )
-                      })
-                    }
-                  </TableBody>
-                </Table>
-            )
-          })
-        }
+        <Table fixedHeader={false} style={styles.table}>
+          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+            <TableRow>
+              <TableHeaderColumn>Device: {this.props.device.name}</TableHeaderColumn>
+            </TableRow>
+            <TableRow>
+              <TableHeaderColumn>Created at</TableHeaderColumn>
+              <TableHeaderColumn>Moisture</TableHeaderColumn>
+              <TableHeaderColumn>Voltage</TableHeaderColumn>
+            </TableRow>
+          </TableHeader>
+          <TableBody displayRowCheckbox={false} stripedRows={true}>
+            {
+              this.state.weatherEntries.map(function(entry, i){
+                return (
+                  <TableRow key={i}>
+                    <TableRowColumn>{moment(entry.createdAt).format('D/MM/Y - hh:mm')}</TableRowColumn>
+                    <TableRowColumn>{entry.moisture}</TableRowColumn>
+                    <TableRowColumn>{entry.currentVoltage}</TableRowColumn>
+                  </TableRow>
+                )
+              })
+            }
+          </TableBody>
+        </Table> 
       </div>
-    )
+    );
   }
 
 }

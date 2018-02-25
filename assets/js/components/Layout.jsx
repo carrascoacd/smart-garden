@@ -13,6 +13,7 @@ export default class Layout extends React.Component {
     super(props);
     this.state = {
       tabSelected: DASHBOARD_TAB,
+      device: null,
     }
   }
 
@@ -20,15 +21,36 @@ export default class Layout extends React.Component {
     this.setState({tabSelected: index});
   }
 
+  componentDidMount() {
+    this.getDevice()
+  }
+
+  getDevice(){
+    fetch('/api/current/device').then((response)=>{
+      return response.json();
+    }).then((data)=>{
+      this.setState({device : data})
+    }).catch((err)=>{
+      console.log(err);
+    });
+  }
+
   render() {
     return (
       <div>
-        {this.state.tabSelected == DASHBOARD_TAB ? (
-          <DashboardTab/>
-        ) : (
-          <ManagementTab/>
+        {this.state.device ? (
+          <div>
+            {this.state.tabSelected == DASHBOARD_TAB ? (
+              <DashboardTab device={this.state.device}/>
+            ) : (
+              <ManagementTab device={this.state.device}/>
+            )}
+            <BottomNavigationBar onTabChange={this.switchTab.bind(this)} />
+          </div>
+        ) : 
+        (
+          <div></div>
         )}
-        <BottomNavigationBar onTabChange={this.switchTab.bind(this)} />
       </div>
     );
   }
