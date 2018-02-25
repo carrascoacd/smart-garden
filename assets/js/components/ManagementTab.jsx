@@ -21,7 +21,7 @@ const styles = {
   },
   item: {
     flexGrow: 1,
-    width: "276"
+    width: "276px"
   }
 }
 
@@ -30,10 +30,28 @@ export default class ManagementTab extends Component {
   constructor(props){
     super(props);
     this.state = {
-      action: "open-valve",
       periodicity: null,
-      checked: false
+      checked: false,
+      pollingInterval: null
     }
+  }
+
+  componentDidMount(){
+    this.getIntervals()
+  }
+
+  getIntervals(){
+    fetch(`/api/devices/${this.props.device.id}/intervals`).then((response)=>{
+      return response.json();
+    }).then((data)=>{
+      let pollingIntervalData = _.find(data.intervals, 
+        function(intervalData){ return intervalData.action == "polling" }
+      )
+      let pollingInterval = this.buildIntervalObject(pollingIntervalData.execution_schedule)
+      this.setState({pollingInterval: pollingInterval})
+    }).catch((err)=>{
+      console.log(err);
+    });
   }
 
   updateCheck() {
@@ -54,26 +72,40 @@ export default class ManagementTab extends Component {
     this.setState({action: value})
   }
 
+  buildCronExpression(minutes, hour){
+    return `${minutes} ${hour} * * *`
+  }
+
+  buildIntervalObject(cronExpression){
+    let cronValues = cronExpression.split(" ")
+    return {
+      minutes: parseInt(cronValues[0]) || 0,
+      hour: parseInt(cronValues[1]) || 0,
+    }
+  }
+
   render() {
     return (
       <div style={styles.container}>
         <List style={styles.item}>
           <Subheader>Polling interval</Subheader>
-          <ListItem>
-            <IntervalSlider maxValue={200} unit="min"/>
-          </ListItem>
+          { this.state.pollingInterval && 
+            <ListItem>
+              <IntervalSlider maxValue={60} unit="min" value={this.state.pollingInterval.minutes}/>
+            </ListItem>
+          }
         </List>
         <List style={styles.item}>
           <Subheader>Open valve time</Subheader>
           <ListItem>
-            <IntervalSlider maxValue={200} unit="min"/>
+            <IntervalSlider maxValue={200} unit="min" value={60}/>
           </ListItem>
         </List>
         <Divider />
         <List style={styles.item}>
           <Subheader>Open valve hour</Subheader>
           <ListItem>
-            <TimePicker onChange={this.setPeriodicity.bind(this)} />
+            <TimePicker onChange={this.setPeriodicity.bind(this)} name="hour" value={new Date()}/>
           </ListItem>
         </List>
         <Divider />
@@ -82,14 +114,16 @@ export default class ManagementTab extends Component {
           {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(function(day, i){
             return (
               <ListItem
-                leftCheckbox={<Checkbox
-                checkedIcon={<ActionFavorite />}
-                uncheckedIcon={<ActionFavoriteBorder />}
-                label={day}
-                onCheck={this.updateCheck.bind(this)}
                 key={i}
-              />}
-            />
+                leftCheckbox={
+                <Checkbox
+                  checkedIcon={<ActionFavorite />}
+                  uncheckedIcon={<ActionFavoriteBorder />}
+                  label={day}
+                  onCheck={this.updateCheck.bind(this)}
+                  checked={i % 2 == 0}
+                />}
+              />
             )
           }.bind(this))
           }

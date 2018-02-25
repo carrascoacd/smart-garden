@@ -38,7 +38,7 @@ export default class Layout extends React.Component {
   render() {
     return (
       <div>
-        {this.state.device ? (
+        {this.state.device != null && 
           <div>
             {this.state.tabSelected == DASHBOARD_TAB ? (
               <DashboardTab device={this.state.device}/>
@@ -47,10 +47,7 @@ export default class Layout extends React.Component {
             )}
             <BottomNavigationBar onTabChange={this.switchTab.bind(this)} />
           </div>
-        ) : 
-        (
-          <div></div>
-        )}
+        }
       </div>
     );
   }

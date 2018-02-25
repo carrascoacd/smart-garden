@@ -18,7 +18,7 @@ export default class IntervalSlider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 50,
+      value: this.props.value || 0,
     }
   }
 
@@ -41,7 +41,7 @@ export default class IntervalSlider extends Component {
             step={1}
             axis={"x"}
             style={styles.horizontalSlider}
-            defaultValue={50}
+            value={this.state.value}
             onChange={this.handleChange.bind(this)} 
             onDragStop={this.saveValue.bind(this)}
             />

@@ -14,7 +14,9 @@ defmodule SmartGardenWeb.WeatherEntriesView do
   end
 
   def render("index.json", %{weather_entries: weather_entries}) do
-    Enum.map(weather_entries, &weather_entry_json/1)
+    %{
+      weatherEntries: Enum.map(weather_entries, &weather_entry_json/1)
+    }
   end
 
   def weather_entry_json(weather_entry) do

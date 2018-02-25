@@ -29,7 +29,7 @@ export default class DeviceTable extends React.Component {
     fetch(`/api/devices/${this.props.device.id}/weather_entries`).then((response)=>{
       return response.json();
     }).then((data)=>{
-      this.setState({weatherEntries: data})
+      this.setState({weatherEntries: data.weatherEntries})
     }).catch((err)=>{
       console.log(err);
     });
