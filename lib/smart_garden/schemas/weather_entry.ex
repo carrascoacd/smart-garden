@@ -20,8 +20,8 @@ defmodule SmartGarden.WeatherEntry do
 
   def changeset(%WeatherEntry{} = weather_entry, attrs) do
     weather_entry
-    |> cast(attrs, [:moisture])
-    |> validate_required([:moisture])
+    |> cast(attrs, [:moisture, :device_id])
+    |> validate_required([:moisture, :device_id])
   end
 
 end
