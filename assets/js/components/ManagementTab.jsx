@@ -32,7 +32,8 @@ export default class ManagementTab extends Component {
     this.state = {
       periodicity: null,
       checked: false,
-      pollingInterval: null
+      pollingInterval: null,
+      controlInterval: null
     }
   }
 
@@ -48,7 +49,11 @@ export default class ManagementTab extends Component {
         function(intervalData){ return intervalData.action == "polling" }
       )
       let pollingInterval = this.buildIntervalObject(pollingIntervalData.execution_schedule)
-      this.setState({pollingInterval: pollingInterval})
+      let controlIntervalData = _.find(data.intervals, 
+        function(intervalData){ return intervalData.action != "polling" }
+      )
+      let controlInterval = this.buildIntervalObject(controlIntervalData.execution_schedule)
+      this.setState({pollingInterval: pollingInterval, controlInterval: controlInterval})
     }).catch((err)=>{
       console.log(err);
     });
@@ -97,9 +102,12 @@ export default class ManagementTab extends Component {
         </List>
         <List style={styles.item}>
           <Subheader>Open valve time</Subheader>
-          <ListItem>
-            <IntervalSlider maxValue={200} unit="min" value={60}/>
-          </ListItem>
+          {
+            this.state.controlInterval &&
+            <ListItem>
+              <IntervalSlider maxValue={200} unit="min" value={this.state.controlInterval.minutes}/>
+            </ListItem>
+          }
         </List>
         <Divider />
         <List style={styles.item}>
