@@ -48,11 +48,11 @@ export default class ManagementTab extends Component {
       let pollingIntervalData = _.find(data.intervals, 
         function(intervalData){ return intervalData.action == "polling" }
       )
-      let pollingInterval = this.buildIntervalObject(pollingIntervalData.execution_schedule)
+      let pollingInterval = this.buildIntervalObject(pollingIntervalData)
       let controlIntervalData = _.find(data.intervals, 
         function(intervalData){ return intervalData.action != "polling" }
       )
-      let controlInterval = this.buildIntervalObject(controlIntervalData.execution_schedule)
+      let controlInterval = this.buildIntervalObject(controlIntervalData)
       this.setState({pollingInterval: pollingInterval, controlInterval: controlInterval})
     }).catch((err)=>{
       console.log(err);
@@ -81,11 +81,14 @@ export default class ManagementTab extends Component {
     return `${minutes} ${hour} * * *`
   }
 
-  buildIntervalObject(cronExpression){
-    let cronValues = cronExpression.split(" ")
+  buildIntervalObject(interval){
+    let cronValues = interval.execution_schedule.split(" ")
+    let date = new Date()
+    date.setHours(parseInt(cronValues[1]) || 0, parseInt(cronValues[0]) || 0)
     return {
-      minutes: parseInt(cronValues[0]) || 0,
-      hour: parseInt(cronValues[1]) || 0,
+      date: date,
+      value: interval.value || 0,
+      days: _.map(cronValues[4].split(","), function(n){return parseInt(n)})
     }
   }
 
@@ -96,7 +99,7 @@ export default class ManagementTab extends Component {
           <Subheader>Polling interval</Subheader>
           { this.state.pollingInterval && 
             <ListItem>
-              <IntervalSlider maxValue={60} unit="min" value={this.state.pollingInterval.minutes}/>
+              <IntervalSlider maxValue={60} unit="min" value={this.state.pollingInterval.date.getMinutes()}/>
             </ListItem>
           }
         </List>
@@ -105,21 +108,25 @@ export default class ManagementTab extends Component {
           {
             this.state.controlInterval &&
             <ListItem>
-              <IntervalSlider maxValue={200} unit="min" value={this.state.controlInterval.minutes}/>
+              <IntervalSlider maxValue={200} unit="min" value={this.state.controlInterval.value}/>
             </ListItem>
           }
         </List>
         <Divider />
         <List style={styles.item}>
           <Subheader>Open valve hour</Subheader>
-          <ListItem>
-            <TimePicker onChange={this.setPeriodicity.bind(this)} name="hour" value={new Date()}/>
-          </ListItem>
+          {
+            this.state.controlInterval &&
+            <ListItem>
+              <TimePicker onChange={this.setPeriodicity.bind(this)} name="hour" value={this.state.controlInterval.date}/>
+            </ListItem>
+          }
         </List>
         <Divider />
         <List style={styles.item}>
           <Subheader>Open valve days</Subheader>
-          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(function(day, i){
+          { this.state.controlInterval &&
+            ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(function(day, i){
             return (
               <ListItem
                 key={i}
@@ -129,7 +136,7 @@ export default class ManagementTab extends Component {
                   uncheckedIcon={<ActionFavoriteBorder />}
                   label={day}
                   onCheck={this.updateCheck.bind(this)}
-                  checked={i % 2 == 0}
+                  checked={this.state.controlInterval.days.includes(i+1)}
                 />}
               />
             )
