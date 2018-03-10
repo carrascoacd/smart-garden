@@ -26,8 +26,8 @@ export default class IntervalSlider extends Component {
     this.setState({value: value})
   }
 
-  saveValue(event, value){
-    this.props.onChange(event, value)
+  saveValue(event){
+    this.props.onChange(event, this.state.value)
   }
 
   render(){

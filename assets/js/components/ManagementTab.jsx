@@ -105,14 +105,14 @@ export default class ManagementTab extends Component {
 
   onChangeControlValue(event, value) {
     this.state.controlInterval.value = value
-    this.updateInterval(this.state.pollingInterval, (data) => {
+    this.updateInterval(this.state.controlInterval, (data) => {
       this.setState({controlInterval: this.state.controlInterval})
     })
   }
 
   onChangeControlHour(event, date) {
     this.state.controlInterval.date = date
-    this.updateInterval(this.state.pollingInterval, (data) => {
+    this.updateInterval(this.state.controlInterval, (data) => {
       this.setState({controlInterval: this.state.controlInterval})
     })
   }
