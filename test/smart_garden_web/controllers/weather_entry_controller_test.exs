@@ -9,7 +9,7 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
   test "create weather_entry", %{conn: conn, device: device} do
     changeset = %SmartGarden.Interval{
       name: "Wait 1000", 
-      value: 1000.0, 
+      value: 1000,
       action: "polling", 
       device: device, 
       execution_schedule: "* * * * *"}
@@ -26,24 +26,21 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
     changeset = %SmartGarden.WeatherEntry{moisture: 1000.0, device: device}
     weather_entry = SmartGarden.Repo.insert!(changeset)
     conn = get conn, device_weather_entries_path(conn, :show, device.id, weather_entry.id)
-    assert json_response(conn, 200) == %{
-      "moisture" => weather_entry.moisture,
-      "currentVoltage" => 0,
-      "createdAt" => NaiveDateTime.to_string weather_entry.inserted_at
-    }
+    assert json_response(conn, 200) == weather_entry_json(weather_entry)
   end
 
   test "index weather_entries", %{conn: conn, device: device} do
     changeset = %SmartGarden.WeatherEntry{moisture: 1000.0, device: device}
     weather_entry = SmartGarden.Repo.insert!(changeset)
     conn = get conn, device_weather_entries_path(conn, :index, device.id)
-    assert json_response(conn, 200) == %{ "weatherEntries" => [
-        %{
-          "moisture" => weather_entry.moisture  ,
-          "currentVoltage" => 0,
-          "createdAt" => NaiveDateTime.to_string weather_entry.inserted_at
-        }
-      ]
+    assert json_response(conn, 200) == %{"weatherEntries" => [weather_entry_json(weather_entry)]}
+  end
+
+  def weather_entry_json(weather_entry) do
+    %{
+      "moisture" => weather_entry.moisture,
+      "currentVoltage" => 0,
+      "createdAt" => NaiveDateTime.to_string weather_entry.inserted_at
     }
   end
 

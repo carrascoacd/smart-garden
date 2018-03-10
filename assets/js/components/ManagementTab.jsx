@@ -53,12 +53,35 @@ export default class ManagementTab extends Component {
       let controlInterval = this.buildIntervalObject(controlIntervalData)
       this.setState({ pollingInterval: pollingInterval, controlInterval: controlInterval })
     }).catch((err) => {
-      console.log(err);
+      console.log(err)
     });
   }
 
-  buildCronExpression(minutes, hour) {
-    return `${minutes} ${hour} * * *`
+  updateInterval(interval, callback) {
+    let bodyParams = JSON.stringify({
+      interval: {
+        value: interval.value, 
+        execution_schedule: this.buildCronExpression(interval.date, interval.days)
+      }
+    })
+    let headers = new Headers()
+    headers.append('Content-Type', 'application/json')
+    fetch(`/api/devices/${this.props.device.id}/intervals/${interval.id}`, {
+      method: "PATCH",
+      headers: headers,
+      body: bodyParams
+    }).then((data) => {
+      callback(data)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  buildCronExpression(date, days) {
+    let minutes = date.getMinutes() == 0 ? "*" : date.getMinutes()
+    let hour = date.getHours() == 0 ? "*" : date.getHours()
+    let parsedDays = days.length == 0 || days[0] == 0 ? "*" : days.join(",")
+    return `${minutes} ${hour} * * ${parsedDays}`
   }
 
   buildIntervalObject(interval) {
@@ -66,25 +89,32 @@ export default class ManagementTab extends Component {
     let date = new Date()
     date.setHours(parseInt(cronValues[1]) || 0, parseInt(cronValues[0]) || 0)
     return {
+      id: interval.id,
       date: date,
       value: interval.value || 0,
-      days: _.map(cronValues[4].split(","), function (n) { return parseInt(n) })
+      days: _.map(cronValues[4].split(","), function (n) { return parseInt(n) || 0 })
     }
   }
 
   onChangePollingValue(event, value) {
     this.state.pollingInterval.value = value
-    this.setState({pollingInterval: this.state.pollingInterval})
+    this.updateInterval(this.state.pollingInterval, (data) => {
+      this.setState({pollingInterval: this.state.pollingInterval})
+    })
   }
 
   onChangeControlValue(event, value) {
     this.state.controlInterval.value = value
-    this.setState({controlInterval: this.state.controlInterval})
+    this.updateInterval(this.state.pollingInterval, (data) => {
+      this.setState({controlInterval: this.state.controlInterval})
+    })
   }
 
   onChangeControlHour(event, date) {
     this.state.controlInterval.date = date
-    this.setState({controlInterval: this.state.controlInterval})
+    this.updateInterval(this.state.pollingInterval, (data) => {
+      this.setState({controlInterval: this.state.controlInterval})
+    })
   }
 
   onCheckControlDay(event, isInputChecked) {
@@ -95,7 +125,9 @@ export default class ManagementTab extends Component {
     else {
       this.state.controlInterval.days.splice(this.state.controlInterval.days.indexOf(day), 1 )
     }
-    this.setState({controlInterval: this.state.controlInterval})
+    this.updateInterval(this.state.controlInterval, (data) => {
+      this.setState({controlInterval: this.state.controlInterval})
+    })
   }
 
   render() {

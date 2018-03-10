@@ -7,7 +7,7 @@ defmodule SmartGarden.Interval do
 
   schema "intervals" do
     field :name, :string
-    field :value, :float
+    field :value, :integer
     field :action, :string
     field :execution_schedule, :string
     belongs_to :device, SmartGarden.Device

@@ -20,6 +20,7 @@ defmodule SmartGardenWeb.IntervalView do
 
   def interval_json(interval) do
     %{
+      id: interval.id,
       name: interval.name,
       value: round(interval.value),
       action: interval.action,
