@@ -58,10 +58,12 @@ export default class ManagementTab extends Component {
   }
 
   updateInterval(interval, callback) {
+    console.log(interval.days)
     let bodyParams = JSON.stringify({
       interval: {
         value: interval.value, 
-        execution_schedule: this.buildCronExpression(interval.date, interval.days)
+        execution_schedule: this.buildCronExpression(interval.date, interval.days),
+        active: interval.days.length > 0
       }
     })
     let headers = new Headers()
@@ -80,7 +82,7 @@ export default class ManagementTab extends Component {
   buildCronExpression(date, days) {
     let minutes = date.getMinutes() == 0 ? "*" : date.getMinutes()
     let hour = date.getHours() == 0 ? "*" : date.getHours()
-    let parsedDays = days.length == 0 || days[0] == 0 ? "*" : days.join(",")
+    let parsedDays = days.length == 0 ? "*" : days.join(",")
     return `${minutes} ${hour} * * ${parsedDays}`
   }
 
@@ -88,11 +90,14 @@ export default class ManagementTab extends Component {
     let cronValues = interval.execution_schedule.split(" ")
     let date = new Date()
     date.setHours(parseInt(cronValues[1]) || 0, parseInt(cronValues[0]) || 0)
+    let days = _.map(cronValues[4].split(","), function (n) { return parseInt(n) })
+    days =  _.filter(days, function(n){ return n == NaN })
+    console.log(days)
     return {
       id: interval.id,
       date: date,
-      value: interval.value || 0,
-      days: _.map(cronValues[4].split(","), function (n) { return parseInt(n) || 0 })
+      value: interval.value,
+      days: days
     }
   }
 
@@ -123,7 +128,7 @@ export default class ManagementTab extends Component {
       this.state.controlInterval.days.push(day)
     }
     else {
-      this.state.controlInterval.days.splice(this.state.controlInterval.days.indexOf(day), 1 )
+      this.state.controlInterval.days.splice(this.state.controlInterval.days.indexOf(day), 1)
     }
     this.updateInterval(this.state.controlInterval, (data) => {
       this.setState({controlInterval: this.state.controlInterval})
@@ -173,9 +178,9 @@ export default class ManagementTab extends Component {
                       checkedIcon={<ActionFavorite />}
                       uncheckedIcon={<ActionFavoriteBorder />}
                       label={day}
-                      value={i + 1}
+                      value={i}
                       onCheck={this.onCheckControlDay.bind(this)}
-                      checked={this.state.controlInterval.days.includes(i + 1)}
+                      checked={this.state.controlInterval.days.includes(i)}
                     />}
                 />
               )

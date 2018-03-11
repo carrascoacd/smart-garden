@@ -24,7 +24,8 @@ defmodule SmartGardenWeb.IntervalView do
       name: interval.name,
       value: round(interval.value),
       action: interval.action,
-      execution_schedule: interval.execution_schedule
+      execution_schedule: interval.execution_schedule,
+      active: interval.active
     }
   end
 
