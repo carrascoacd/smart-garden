@@ -13,7 +13,8 @@ defmodule SmartGarden.WeatherEntry do
 
   def get_all_by_device(device_id) do
     query = from(i in WeatherEntry,
-              where: i.device_id == ^device_id)
+              where: i.device_id == ^device_id,
+              order_by: [desc: i.inserted_at])
     query
       |> SmartGarden.Repo.all
   end
