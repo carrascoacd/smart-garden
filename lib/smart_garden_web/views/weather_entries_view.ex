@@ -4,7 +4,7 @@ defmodule SmartGardenWeb.WeatherEntriesView do
 
   def render("create.json", %{interval: interval}) do
     %{
-      value: round(interval.value),
+      value: interval.value,
       action: interval.action
     }
   end

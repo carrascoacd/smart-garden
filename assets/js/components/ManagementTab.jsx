@@ -58,10 +58,9 @@ export default class ManagementTab extends Component {
   }
 
   updateInterval(interval, callback) {
-    console.log(interval.days)
     let bodyParams = JSON.stringify({
       interval: {
-        value: interval.value, 
+        value: interval.value * 60 * 1000, 
         execution_schedule: this.buildCronExpression(interval.date, interval.days),
         active: interval.days.length > 0
       }
