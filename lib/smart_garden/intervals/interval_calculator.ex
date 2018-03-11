@@ -11,12 +11,11 @@ defmodule SmartGarden.IntervalCalculator do
                         i.action != "polling" and i.active == true)
       |> SmartGarden.Repo.one
     
-    polling_matches_date = ~e[#{polling_interval.execution_schedule}] 
-      |> Crontab.DateChecker.matches_date?(NaiveDateTime.utc_now)
-    if polling_matches_date or control_interval == nil do
-      polling_interval
-    else
+    if control_interval != nil and Crontab.DateChecker.matches_date?(
+      ~e[#{control_interval.execution_schedule}], NaiveDateTime.utc_now) do
       control_interval
+    else
+      polling_interval
     end
   end
   
