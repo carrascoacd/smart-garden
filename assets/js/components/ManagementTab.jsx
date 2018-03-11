@@ -13,7 +13,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     flexDirection: "column",
-    marginBottom: "100px"
+    marginBottom: "100px",
   },
   nestedContainer: {
     display: "flex",
@@ -21,8 +21,8 @@ const styles = {
   },
   item: {
     flexGrow: 1,
-    width: "276px"
-  }
+    width: "100%",
+  },
 }
 
 export default class ManagementTab extends Component {

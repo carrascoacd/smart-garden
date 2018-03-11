@@ -2,13 +2,12 @@ import React from 'react';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 const styles = {
-  table: {
-    width: "auto", 
-    tableLayout: "auto"
-  },
   container: {
     display: "flex",
     justifyContent: "center"
+  },
+  column: {
+    width: '9em',
   }
 }
 
@@ -38,13 +37,10 @@ export default class DeviceTable extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-        <Table fixedHeader={false} style={styles.table}>
-          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+        <Table>
+          <TableHeader adjustForCheckbox={false} displaySelectAll={false} fixedHeader={false}>
             <TableRow>
-              <TableHeaderColumn>Device: {this.props.device.name}</TableHeaderColumn>
-            </TableRow>
-            <TableRow>
-              <TableHeaderColumn>Created at</TableHeaderColumn>
+              <TableHeaderColumn style={styles.column}>Created at</TableHeaderColumn>
               <TableHeaderColumn>Moisture</TableHeaderColumn>
               <TableHeaderColumn>Temperature</TableHeaderColumn>
             </TableRow>
@@ -54,9 +50,9 @@ export default class DeviceTable extends React.Component {
               this.state.weatherEntries.map(function(entry, i){
                 return (
                   <TableRow key={i}>
-                    <TableRowColumn>{moment(entry.createdAt).format('D/MM/Y - hh:mm')}</TableRowColumn>
+                    <TableRowColumn style={styles.column}>{moment(entry.createdAt).format('D/MM/Y - hh:mm')}</TableRowColumn>
                     <TableRowColumn>{entry.moisture}</TableRowColumn>
-                    <TableRowColumn>-</TableRowColumn>
+                    <TableRowColumn>31</TableRowColumn>
                   </TableRow>
                 )
               })

@@ -7,9 +7,9 @@ const styles = {
     "alignItems": "center",
     "flexDirection": "column"
   },
-  horizontalSlider: {
-    width: "256px",
-    paddingLeft: "16px"
+  slider: {
+    width: "300px",
+    height: "1em"
   }
 };
 
@@ -40,7 +40,7 @@ export default class IntervalSlider extends Component {
             max={this.props.maxValue}
             step={1}
             axis={"x"}
-            style={styles.horizontalSlider}
+            style={styles.slider}
             value={this.state.value}
             onChange={this.handleChange.bind(this)} 
             onDragStop={this.saveValue.bind(this)}
