@@ -95,7 +95,7 @@ export default class ManagementTab extends Component {
     return {
       id: interval.id,
       date: date,
-      value: interval.value,
+      value: interval.value / 60 / 1000,
       days: days
     }
   }
