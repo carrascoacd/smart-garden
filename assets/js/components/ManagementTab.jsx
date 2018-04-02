@@ -58,10 +58,14 @@ export default class ManagementTab extends Component {
   }
 
   updateInterval(interval, callback) {
+    let executionSchedule = this.buildCronExpression(
+      new Date(interval.date.getTime()), 
+      interval.days
+    )
     let bodyParams = JSON.stringify({
       interval: {
         value: interval.value * 60 * 1000, 
-        execution_schedule: this.buildCronExpression(interval.date, interval.days),
+        execution_schedule: executionSchedule,
         active: interval.days.length > 0
       }
     })
@@ -79,8 +83,9 @@ export default class ManagementTab extends Component {
   }
 
   buildCronExpression(date, days) {
+    date.setHours(date.getHours() + date.getTimezoneOffset() / 60)
+    let hour = date.getHours()
     let minutes = date.getMinutes() == 0 ? "*" : date.getMinutes()
-    let hour = date.getHours() == 0 ? "*" : date.getHours()
     let parsedDays = days.length == 0 ? "*" : days.join(",")
     return `${minutes} ${hour} * * ${parsedDays}`
   }
@@ -88,10 +93,11 @@ export default class ManagementTab extends Component {
   buildIntervalObject(interval) {
     let cronValues = interval.execution_schedule.split(" ")
     let date = new Date()
-    date.setHours(parseInt(cronValues[1]) || 0, parseInt(cronValues[0]) || 0)
+    let hour = (parseInt(cronValues[1]) || 0) - date.getTimezoneOffset() / 60
+    let minutes = parseInt(cronValues[0]) || 0
+    date.setHours(hour, minutes)
     let days = _.map(cronValues[4].split(","), function (n) { return parseInt(n) })
-    days =  _.filter(days, function(n){ return n == NaN })
-    console.log(days)
+    days =  _.filter(days, function(n){ return n != NaN })
     return {
       id: interval.id,
       date: date,
