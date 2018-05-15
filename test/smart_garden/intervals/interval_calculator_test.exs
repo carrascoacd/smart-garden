@@ -12,14 +12,14 @@ defmodule SmartGarden.IntervalCalculatorTest do
       device: device, 
       name: "action", 
       action: "open-valve",
-      value: 20,
+      value: 20 * 60 * 1000,
       execution_schedule: "#{Time.add(current_time, -60 * 22, :seconds).minute} * * * *",
     }
     polling_interval = SmartGarden.Repo.insert! %SmartGarden.Interval{
       device: device, 
       name: "polling", 
       action: "polling",
-      value: 20,
+      value: 20 * 60 * 1000,
       execution_schedule: "#{current_time.minute} * * * *"
     }
     next_interval = SmartGarden.IntervalCalculator.next_interval_for device
@@ -32,7 +32,7 @@ defmodule SmartGarden.IntervalCalculatorTest do
       device: device, 
       name: "action", 
       action: "open-valve",
-      value: 20,
+      value: 20 * 60 * 1000,
       execution_schedule: "#{current_time.minute} #{current_time.hour} * * *"
     }
     desired_time = Time.add(current_time, -60, :seconds)
@@ -52,7 +52,7 @@ defmodule SmartGarden.IntervalCalculatorTest do
       device: device, 
       name: "action", 
       action: "open-valve",
-      value: 20,
+      value: 20 * 60 * 1000,
       execution_schedule: "#{Time.add(current_time, -600, :seconds).minute} * * * *"
     }
     SmartGarden.Repo.insert! %SmartGarden.Interval{

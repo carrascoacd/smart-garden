@@ -36,7 +36,7 @@ defmodule SmartGarden.IntervalCalculator do
       cron_execution_schedule.weekday
     end
     min_interval_time = Time.from_erl!({interval_hour, interval_minute, 0})
-    max_interval_time = Time.add(min_interval_time, 60 * (interval.value + 1), :seconds)
+    max_interval_time = Time.add(min_interval_time, interval.value, :milliseconds)
     time = NaiveDateTime.to_time date
 
     Enum.member?(interval_weekdays, Date.day_of_week(date)) and
