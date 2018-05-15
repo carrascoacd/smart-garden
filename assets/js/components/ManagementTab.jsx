@@ -85,8 +85,8 @@ export default class ManagementTab extends Component {
   buildCronExpression(date, days) {
     date.setHours(date.getHours() + date.getTimezoneOffset() / 60)
     let hour = date.getHours()
-    let minutes = date.getMinutes() == 0 ? "*" : date.getMinutes()
-    let parsedDays = days.length == 0 ? "*" : days.join(",")
+    let minutes = date.getMinutes()
+    let parsedDays = days.join(",")
     return `${minutes} ${hour} * * ${parsedDays}`
   }
 
@@ -97,7 +97,7 @@ export default class ManagementTab extends Component {
     let minutes = parseInt(cronValues[0]) || 0
     date.setHours(hour, minutes)
     let days = _.map(cronValues[4].split(","), function (n) { return parseInt(n) })
-    days =  _.filter(days, function(n){ return n != NaN })
+    days =  _.filter(days, function(n){ return !isNaN(n) })
     return {
       id: interval.id,
       date: date,
