@@ -183,9 +183,9 @@ export default class ManagementTab extends Component {
                       checkedIcon={<ActionFavorite />}
                       uncheckedIcon={<ActionFavoriteBorder />}
                       label={day}
-                      value={i}
+                      value={i + 1}
                       onCheck={this.onCheckControlDay.bind(this)}
-                      checked={this.state.controlInterval.days.includes(i)}
+                      checked={this.state.controlInterval.days.includes(i + 1)}
                     />}
                 />
               )
