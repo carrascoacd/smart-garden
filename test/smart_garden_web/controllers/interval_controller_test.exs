@@ -1,8 +1,12 @@
 defmodule SmartGardenWeb.IntervalDeviceControllerTest do
   use SmartGardenWeb.ConnCase
 
+  alias SmartGarden.Repo
+  alias SmartGarden.Device
+  alias SmartGarden.Interval
+
   setup do
-    device = SmartGarden.Repo.insert!(%SmartGarden.Device{name: "Arduino Device"})
+    device = Repo.insert!(%Device{name: "Arduino Device"})
     {:ok, %{device: device}}
   end
 
@@ -13,23 +17,23 @@ defmodule SmartGardenWeb.IntervalDeviceControllerTest do
   end
 
   test "get interval", %{conn: conn, device: device} do
-    changeset = %SmartGarden.Interval{name: "water", value: 100, device: device, action: "open-valve"}
-    interval = SmartGarden.Repo.insert!(changeset)
+    changeset = %Interval{name: "water", value: 100, device: device, action: "open-valve"}
+    interval = Repo.insert!(changeset)
     conn = get conn, device_interval_path(conn, :show, device.id, interval.id)
     assert json_response(conn, 200) == interval_json(interval, %{execution_schedule: nil})
   end
 
   test "index intervals", %{conn: conn, device: device} do
-    changeset = %SmartGarden.Interval{name: "water", value: 100, device: device, action: "polling"}
-    interval = SmartGarden.Repo.insert!(changeset)
+    changeset = %Interval{name: "water", value: 100, device: device, action: "polling"}
+    interval = Repo.insert!(changeset)
     conn = get conn, device_interval_path(conn, :index, device.id)
     assert json_response(conn, 200) == %{"intervals" => [interval_json(interval, %{execution_schedule: nil})]}
   end
 
   test "update intervals", %{conn: conn, device: device} do
     execution_schedule = "* * * * 5"
-    changeset = %SmartGarden.Interval{name: "water", value: 100, device: device, action: "polling"}
-    interval = SmartGarden.Repo.insert!(changeset)
+    changeset = %Interval{name: "water", value: 100, device: device, action: "polling"}
+    interval = Repo.insert!(changeset)
     conn = patch conn, device_interval_path(conn, :update, device.id, interval.id), 
                        interval: %{execution_schedule: execution_schedule}
     assert json_response(conn, 200) == interval_json(interval, %{execution_schedule: execution_schedule})

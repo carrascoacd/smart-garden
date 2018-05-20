@@ -1,20 +1,23 @@
 defmodule SmartGardenWeb.DeviceController do
   use SmartGardenWeb, :controller
 
+  alias SmartGarden.Repo
+  alias SmartGarden.Device
+
   def index(conn, _params) do
-    devices = SmartGarden.Device.get_all_with_relations
+    devices = Device.get_all_with_relations
     render conn, "index.json", devices: devices
   end
 
   def current(conn, _params) do
-    device = SmartGarden.Repo.one SmartGarden.Device
+    device = Repo.one Device
     conn |> 
       render("show.json", device: device)
   end
 
   def create(conn, %{"device" => device_params}) do
-    changeset = SmartGarden.Device.changeset(%SmartGarden.Device{}, device_params)
-    case SmartGarden.Repo.insert(changeset) do
+    changeset = Device.changeset(%Device{}, device_params)
+    case Repo.insert(changeset) do
       {:ok, device} ->
         conn 
           |> put_status(:created) 

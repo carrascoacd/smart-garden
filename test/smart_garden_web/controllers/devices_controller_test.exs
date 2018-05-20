@@ -1,11 +1,16 @@
 defmodule SmartGardenWeb.DeviceControllerTest do
   use SmartGardenWeb.ConnCase
 
+  alias SmartGarden.Repo
+  alias SmartGarden.Device
+  alias SmartGarden.Interval
+  alias SmartGarden.WeatherEntry
+  
   setup do
-    device = SmartGarden.Repo.insert!(%SmartGarden.Device{name: "Arduino device"})
-    weather_entry = SmartGarden.Repo.insert!(%SmartGarden.WeatherEntry{moisture: 300.0, device: device})
-    changeset = %SmartGarden.Interval{name: "water", value: 100, device: device, action: "open-valve"}
-    interval = SmartGarden.Repo.insert!(changeset)
+    device = Repo.insert!(%Device{name: "Arduino device"})
+    weather_entry = Repo.insert!(%WeatherEntry{moisture: 300.0, device: device})
+    changeset = %Interval{name: "water", value: 100, device: device, action: "open-valve"}
+    interval = Repo.insert!(changeset)
     {:ok, %{device: device, weather_entry: weather_entry, interval: interval}}
   end
 

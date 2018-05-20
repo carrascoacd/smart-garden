@@ -1,22 +1,26 @@
 defmodule SmartGardenWeb.IntervalController do
   use SmartGardenWeb, :controller
 
+  alias SmartGarden.Repo
+  alias SmartGarden.Device
+  alias SmartGarden.Interval
+
   def index(conn, %{"device_id" => device_id}) do
-    intervals = SmartGarden.Interval.get_all_by_device device_id
+    intervals = Interval.get_all_by_device device_id
     conn 
       |> render("index.json", intervals: intervals)
   end
 
   def show(conn, %{"device_id" => _device_id, "id" => id}) do
-    interval = SmartGarden.Repo.get! SmartGarden.Interval, id
+    interval = Repo.get! Interval, id
     conn 
       |> render("show.json", interval: interval)
   end
 
   def create(conn, %{"device_id" => device_id, "interval" => interval_params}) do
     interval_params = Map.merge(interval_params, %{"device_id" => device_id})
-    changeset = SmartGarden.Interval.changeset(%SmartGarden.Interval{}, interval_params)
-    case SmartGarden.Repo.insert(changeset) do
+    changeset = Interval.changeset(%Interval{}, interval_params)
+    case Repo.insert(changeset) do
       {:ok, interval} ->
         conn 
           |> put_status(:created) 
@@ -29,9 +33,9 @@ defmodule SmartGardenWeb.IntervalController do
   end
 
   def update(conn, %{"device_id" => _device_id, "id" => id, "interval" => interval_params}) do
-    interval = SmartGarden.Repo.get! SmartGarden.Interval, id
-    changeset = SmartGarden.Interval.changeset(interval, interval_params)
-    case SmartGarden.Repo.update(changeset) do
+    interval = Repo.get! Interval, id
+    changeset = Interval.changeset(interval, interval_params)
+    case Repo.update(changeset) do
       {:ok, interval} ->
         conn 
           |> put_status(:ok) 
