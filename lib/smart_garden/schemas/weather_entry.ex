@@ -11,10 +11,11 @@ defmodule SmartGarden.WeatherEntry do
     timestamps()
   end
 
-  def get_all_by_device(device_id) do
+  def get_all_by_device(device_id, limit \\ 100) do
     query = from(i in WeatherEntry,
               where: i.device_id == ^device_id,
-              order_by: [desc: i.inserted_at])
+              order_by: [desc: i.inserted_at],
+              limit: ^limit)
     query
       |> SmartGarden.Repo.all
   end
