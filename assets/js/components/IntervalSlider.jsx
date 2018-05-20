@@ -33,7 +33,11 @@ export default class IntervalSlider extends Component {
   render(){
     return (
       <div style={styles.container}>
-        <div>{this.state.value} {this.props.unit}</div>
+        {this.props.unit == "min" ? (
+          <div>{this.state.value} {this.props.unit} ({(this.state.value / 60).toFixed(2)} hours)</div>
+        ) : (
+          <div>{this.state.value} {this.props.unit}</div>
+        )}
         <div>
           <Slider 
             min={0}

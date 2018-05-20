@@ -50,9 +50,9 @@ export default class DeviceTable extends React.Component {
               this.state.weatherEntries.map(function(entry, i){
                 return (
                   <TableRow key={i}>
-                    <TableRowColumn style={styles.column}>{moment(entry.createdAt).format('D/MM/Y - hh:mm')}</TableRowColumn>
+                    <TableRowColumn style={styles.column}>{moment(entry.createdAt).add(-(new Date).getTimezoneOffset(), 'minutes').format('D/MM/Y - hh:mm')}</TableRowColumn>
                     <TableRowColumn>{entry.moisture}</TableRowColumn>
-                    <TableRowColumn>31</TableRowColumn>
+                    <TableRowColumn>-</TableRowColumn>
                   </TableRow>
                 )
               })
