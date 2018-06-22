@@ -17,9 +17,14 @@ defmodule SmartGardenWeb.WeatherEntriesController do
       |> render("show.json", weather_entry: weather_entry)
   end
 
-  def create(conn, %{"device_id" => device_id, "weather_entry" => weather_entry_params}) do
-    weather_entry_params = Map.merge(weather_entry_params, %{"device_id" => device_id})
-    changeset = WeatherEntry.changeset(%WeatherEntry{}, weather_entry_params)
+  def create(conn, %{"device_id" => device_id, "w" => weather_entry_params}) do
+    weather_entry_data = %{
+      "moisture" => Map.get(weather_entry_params, "m"),
+      "humidity" => Map.get(weather_entry_params, "h"),
+      "temperature" => Map.get(weather_entry_params, "t"),
+      "device_id" => device_id
+    }
+    changeset = WeatherEntry.changeset(%WeatherEntry{}, weather_entry_data)
     case Repo.insert(changeset) do
       {:ok, _weather_entry} ->
         device = Repo.get!(Device, device_id)

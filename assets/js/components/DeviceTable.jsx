@@ -43,6 +43,7 @@ export default class DeviceTable extends React.Component {
               <TableHeaderColumn style={styles.column}>Created at</TableHeaderColumn>
               <TableHeaderColumn>Moisture</TableHeaderColumn>
               <TableHeaderColumn>Temperature</TableHeaderColumn>
+              <TableHeaderColumn>Humidity</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false} stripedRows={true}>
@@ -52,7 +53,8 @@ export default class DeviceTable extends React.Component {
                   <TableRow key={i}>
                     <TableRowColumn style={styles.column}>{moment(entry.createdAt).add(-(new Date).getTimezoneOffset(), 'minutes').format('D/MM - hh:mm a')}</TableRowColumn>
                     <TableRowColumn>{entry.moisture}</TableRowColumn>
-                    <TableRowColumn>-</TableRowColumn>
+                    <TableRowColumn>{entry.temperature}</TableRowColumn>
+                    <TableRowColumn>{entry.humidity}</TableRowColumn>
                   </TableRow>
                 )
               })

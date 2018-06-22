@@ -7,6 +7,8 @@ defmodule SmartGarden.WeatherEntry do
 
   schema "weather_entries" do
     field :moisture, :float
+    field :temperature, :float
+    field :humidity, :float
     belongs_to :device, SmartGarden.Device
     timestamps()
   end
@@ -22,8 +24,8 @@ defmodule SmartGarden.WeatherEntry do
 
   def changeset(%WeatherEntry{} = weather_entry, attrs) do
     weather_entry
-    |> cast(attrs, [:moisture, :device_id])
-    |> validate_required([:moisture, :device_id])
+    |> cast(attrs, [:moisture, :temperature, :humidity, :device_id])
+    |> validate_required([:moisture, :temperature, :humidity, :device_id])
   end
 
 end

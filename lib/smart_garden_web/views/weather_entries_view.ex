@@ -22,6 +22,8 @@ defmodule SmartGardenWeb.WeatherEntriesView do
   def weather_entry_json(weather_entry) do
     %{
       moisture: round(weather_entry.moisture),
+      humidity: round(weather_entry.humidity),
+      temperature: round(weather_entry.temperature),
       currentVoltage: 0,
       createdAt: NaiveDateTime.to_string(weather_entry.inserted_at)
     }
