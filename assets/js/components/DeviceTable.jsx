@@ -7,7 +7,7 @@ const styles = {
     justifyContent: "center"
   },
   column: {
-    width: '9em',
+    width: '8em',
   }
 }
 
@@ -51,7 +51,7 @@ export default class DeviceTable extends React.Component {
               this.state.weatherEntries.map(function(entry, i){
                 return (
                   <TableRow key={i}>
-                    <TableRowColumn style={styles.column}>{moment(entry.createdAt).add(-(new Date).getTimezoneOffset(), 'minutes').format('D/MM - hh:mm a')}</TableRowColumn>
+                    <TableRowColumn style={styles.column}>{moment(entry.createdAt).add(-(new Date).getTimezoneOffset(), 'minutes').format('D/MM - HH:mm')}</TableRowColumn>
                     <TableRowColumn>{entry.moisture}</TableRowColumn>
                     <TableRowColumn>{entry.temperature}</TableRowColumn>
                     <TableRowColumn>{entry.humidity}</TableRowColumn>
