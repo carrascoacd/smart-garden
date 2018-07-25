@@ -7,7 +7,7 @@ const styles = {
     justifyContent: "center"
   },
   column: {
-    width: '8em',
+    width: '6em',
   }
 }
 
