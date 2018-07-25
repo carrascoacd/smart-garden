@@ -147,7 +147,7 @@ export default class ManagementTab extends Component {
           <Subheader>Polling interval</Subheader>
           {this.state.pollingInterval &&
             <ListItem>
-              <IntervalSlider maxValue={1440} unit="min" value={this.state.pollingInterval.value} onChange={this.onChangePollingValue.bind(this)} />
+              <IntervalSlider maxValue={480} unit="min" value={this.state.pollingInterval.value} onChange={this.onChangePollingValue.bind(this)} />
             </ListItem>
           }
         </List>

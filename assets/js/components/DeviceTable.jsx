@@ -6,8 +6,12 @@ const styles = {
     display: "flex",
     justifyContent: "center"
   },
-  column: {
+  createdAtColumn: {
     width: '6em',
+  },
+  dataColumn: {
+    paddingLeft: '0',
+    paddingRight: '0'
   }
 }
 
@@ -40,10 +44,10 @@ export default class DeviceTable extends React.Component {
         <Table>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false} fixedHeader={false}>
             <TableRow>
-              <TableHeaderColumn style={styles.column}>Created at</TableHeaderColumn>
-              <TableHeaderColumn>Moisture</TableHeaderColumn>
-              <TableHeaderColumn>Temperature</TableHeaderColumn>
-              <TableHeaderColumn>Humidity</TableHeaderColumn>
+              <TableHeaderColumn style={styles.createdAtColumn}>Created at</TableHeaderColumn>
+              <TableHeaderColumn style={styles.dataColumn}>Moisture</TableHeaderColumn>
+              <TableHeaderColumn style={styles.dataColumn}>Temperature</TableHeaderColumn>
+              <TableHeaderColumn style={styles.dataColumn}>Humidity</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false} stripedRows={true}>
@@ -51,10 +55,10 @@ export default class DeviceTable extends React.Component {
               this.state.weatherEntries.map(function(entry, i){
                 return (
                   <TableRow key={i}>
-                    <TableRowColumn style={styles.column}>{moment(entry.createdAt).add(-(new Date).getTimezoneOffset(), 'minutes').format('D/MM - HH:mm')}</TableRowColumn>
-                    <TableRowColumn>{entry.moisture}</TableRowColumn>
-                    <TableRowColumn>{entry.temperature}</TableRowColumn>
-                    <TableRowColumn>{entry.humidity}</TableRowColumn>
+                    <TableRowColumn style={styles.createdAtColumn}>{moment(entry.createdAt).add(-(new Date).getTimezoneOffset(), 'minutes').format('D/MM - HH:mm')}</TableRowColumn>
+                    <TableRowColumn style={styles.dataColumn}>{entry.moisture}</TableRowColumn>
+                    <TableRowColumn style={styles.dataColumn}>{entry.temperature}</TableRowColumn>
+                    <TableRowColumn style={styles.dataColumn}>{entry.humidity}</TableRowColumn>
                   </TableRow>
                 )
               })
