@@ -14,7 +14,7 @@ defmodule SmartGardenWeb.DeviceControllerTest do
     {:ok, %{device: device, weather_entry: weather_entry, interval: interval}}
   end
 
-  test "index devices", %{conn: conn, device: device, weather_entry: weather_entry, interval: interval} do
+  test "index devices", %{conn: conn, device: device, weather_entry: _weather_entry, interval: _interval} do
     conn = get conn, device_path(conn, :index)
     assert json_response(conn, 200) == %{
       "deviceList" => [device_json(device)]
@@ -27,7 +27,7 @@ defmodule SmartGardenWeb.DeviceControllerTest do
     assert json_response(conn, 201)
   end
 
-  test "get current device", %{conn: conn, device: device, weather_entry: weather_entry, interval: interval} do
+  test "get current device", %{conn: conn, device: device, weather_entry: _weather_entry, interval: _interval} do
     conn = get conn, current_device_path(conn, :current)
     assert json_response(conn, 200) == device_json(device)
   end

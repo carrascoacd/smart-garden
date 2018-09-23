@@ -24,7 +24,8 @@ defmodule SmartGardenWeb.WeatherEntriesView do
       moisture: round(weather_entry.moisture),
       humidity: round(weather_entry.humidity),
       temperature: round(weather_entry.temperature),
-      currentVoltage: 0,
+      mainVoltage: weather_entry.main_voltage,
+      secondaryVoltage: weather_entry.secondary_voltage,
       createdAt: NaiveDateTime.to_string(weather_entry.inserted_at)
     }
   end

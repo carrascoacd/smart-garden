@@ -44,10 +44,12 @@ export default class DeviceTable extends React.Component {
         <Table>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false} fixedHeader={false}>
             <TableRow>
-              <TableHeaderColumn style={styles.createdAtColumn}>Created at</TableHeaderColumn>
-              <TableHeaderColumn style={styles.dataColumn}>Moisture</TableHeaderColumn>
-              <TableHeaderColumn style={styles.dataColumn}>Temperature</TableHeaderColumn>
-              <TableHeaderColumn style={styles.dataColumn}>Humidity</TableHeaderColumn>
+              <TableHeaderColumn style={styles.createdAtColumn}>At</TableHeaderColumn>
+              <TableHeaderColumn style={styles.dataColumn}>M</TableHeaderColumn>
+              <TableHeaderColumn style={styles.dataColumn}>C º</TableHeaderColumn>
+              <TableHeaderColumn style={styles.dataColumn}>H %</TableHeaderColumn>
+              <TableHeaderColumn style={styles.dataColumn}>Main V</TableHeaderColumn>
+              <TableHeaderColumn style={styles.dataColumn}>Sec V</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false} stripedRows={true}>
@@ -58,7 +60,9 @@ export default class DeviceTable extends React.Component {
                     <TableRowColumn style={styles.createdAtColumn}>{moment(entry.createdAt).add(-(new Date).getTimezoneOffset(), 'minutes').format('D/MM - HH:mm')}</TableRowColumn>
                     <TableRowColumn style={styles.dataColumn}>{entry.moisture}</TableRowColumn>
                     <TableRowColumn style={styles.dataColumn}>{entry.temperature}</TableRowColumn>
-                    <TableRowColumn style={styles.dataColumn}>{entry.humidity}</TableRowColumn>
+                    <TableRowColumn style={styles.dataColumn}>{entry.humidity}</TableRowColumn>  
+                    <TableRowColumn style={styles.dataColumn}>{entry.mainVoltage}</TableRowColumn>
+                    <TableRowColumn style={styles.dataColumn}>{entry.secondaryVoltage}</TableRowColumn>
                   </TableRow>
                 )
               })

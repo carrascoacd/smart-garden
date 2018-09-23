@@ -22,6 +22,8 @@ defmodule SmartGardenWeb.WeatherEntriesController do
       "moisture" => Map.get(weather_entry_params, "m"),
       "humidity" => Map.get(weather_entry_params, "h"),
       "temperature" => Map.get(weather_entry_params, "t"),
+      "main_voltage" => Map.get(weather_entry_params, "mv", 0),
+      "secondary_voltage" => Map.get(weather_entry_params, "sv", 0),
       "device_id" => device_id
     }
     changeset = WeatherEntry.changeset(%WeatherEntry{}, weather_entry_data)

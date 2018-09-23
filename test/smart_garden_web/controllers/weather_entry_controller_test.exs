@@ -18,7 +18,7 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
       device: device, 
       execution_schedule: "* * * * *"}
     Repo.insert! changeset
-    weather_entry_params = %{m: 1000, h: 99, t: 35}
+    weather_entry_params = %{m: 1000, h: 99, t: 35, mv: 3600, sv: 3500}
     conn = post conn, device_weather_entries_path(conn, :create, device.id), w: weather_entry_params
     assert json_response(conn, 201) == %{
       "action" => "polling",

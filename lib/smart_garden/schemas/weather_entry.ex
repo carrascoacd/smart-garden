@@ -9,6 +9,8 @@ defmodule SmartGarden.WeatherEntry do
     field :moisture, :float
     field :temperature, :float
     field :humidity, :float
+    field :main_voltage, :integer
+    field :secondary_voltage, :integer
     belongs_to :device, SmartGarden.Device
     timestamps()
   end
@@ -24,7 +26,7 @@ defmodule SmartGarden.WeatherEntry do
 
   def changeset(%WeatherEntry{} = weather_entry, attrs) do
     weather_entry
-    |> cast(attrs, [:moisture, :temperature, :humidity, :device_id])
+    |> cast(attrs, [:moisture, :temperature, :humidity, :device_id, :main_voltage, :secondary_voltage])
     |> validate_required([:moisture, :temperature, :humidity, :device_id])
   end
 
