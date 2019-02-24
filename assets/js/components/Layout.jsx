@@ -1,5 +1,4 @@
 import React from 'react';
-import Slider from 'material-ui/Slider';
 import BottomNavigationBar from './BottomNavigationBar.jsx';
 import ManagementTab from './ManagementTab.jsx';
 import DashboardTab from './DashboardTab.jsx';

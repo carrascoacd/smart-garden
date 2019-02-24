@@ -7,9 +7,6 @@ export default class ChartsTab extends Component {
     return (
       <div>
         <DeviceCharts device={this.props.device}/>
-        {/* <MediaQuery query='(min-device-width: 1224px)'>
-          <DeviceCharts/>
-        </MediaQuery> */}
       </div>
     );
   }

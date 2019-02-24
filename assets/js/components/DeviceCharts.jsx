@@ -1,5 +1,5 @@
-import {AreaChart} from 'react-easy-chart';
 import React from 'react';
+import {AreaChart, Legend} from 'react-easy-chart';
 import 'whatwg-fetch'
 
 const center = {
@@ -10,28 +10,39 @@ export default class DeviceCharts extends React.Component {
 
   constructor(props) {
     super(props);
+    const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500;
     this.state = {
-      voltageData: [],
-      moistureData: [],
+      data: [],
+      showToolTip: false, 
+      windowWidth: initialWidth - 100
     }
   }
 
   componentDidMount() {
     this.getWeatherEntries()
+    window.addEventListener('resize', this.handleResize.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize.bind(this));
+  }
+
+  handleResize() {
+    console.log(window.innerWidth - 100)
+    this.setState({windowWidth: window.innerWidth - 100});
   }
 
   getWeatherEntries(){
     fetch(`/api/devices/${this.props.device.id}/weather_entries`).then((response)=>{
       return response.json();
-    }).then((data)=>{
+    }).then((data)=>{      
       var moistureData = this.generateMoistureChartData(data.weatherEntries)
       var voltageData = this.generateVoltageChartData(data.weatherEntries)
-      this.setState({voltageData: voltageData, moistureData: moistureData})
+      this.setState({data: [moistureData, voltageData]})
     }).catch((err)=>{
       console.log(err);
     });
   }
-
 
   generateMoistureChartData(weatherEntries){
     return _.map(weatherEntries, function(entry){
@@ -51,37 +62,31 @@ export default class DeviceCharts extends React.Component {
         <div>
           <AreaChart
             xType={'time'}
+            // axes={(this.state.windowWidth) > 800 ? true : false}
             axes
             dataPoints
             yTicks={3}
             grid
             datePattern={'%Y-%m-%dT%H:%M:%S.%LZ'}
-            areaColors={['black', 'blue']}
+            areaColors={['green', 'blue']}
             tickTimeDisplayFormat={'%m-%d %H'}
-            axisLabels={{x: 'Dates', y: 'Moisture'}}
-            yDomainRange={[0, 600]}
+            yDomainRange={[0, 5000]}
             interpolate={'cardinal'}
-            width={1200}
-            height={400}
-            data={this.state.moistureData}
+            width={this.state.windowWidth}
+            height={(this.state.windowWidth) > 800 ? this.state.windowWidth / 3 : this.state.windowWidth}
+            data={this.state.data}
           />
-        </div>
-        <div>
-          <AreaChart
-            xType={'time'}
-            axes
-            dataPoints
-            yTicks={3}
-            grid
-            datePattern={'%Y-%m-%dT%H:%M:%S.%LZ'}
-            areaColors={['green', 'purple']}
-            tickTimeDisplayFormat={'%m-%d %H'}
-            axisLabels={{x: 'Dates', y: 'Voltage'}}
-            yDomainRange={[0, 10]}
-            interpolate={'cardinal'}
-            width={1200}
-            height={400}
-            data={this.state.voltageData}
+           <Legend
+            data={[
+              {key: 'M'},
+              {key: 'MV'}
+            ]}
+            config={[
+              {color: 'green'},
+              {color: 'blue'}
+            ]}
+            dataId={'key'}
+            horizontal
           />
         </div>
       </div>

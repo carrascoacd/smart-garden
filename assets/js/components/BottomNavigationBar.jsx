@@ -3,9 +3,9 @@ import FontIcon from 'material-ui/FontIcon';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 
-const healthIcon = <FontIcon className="material-icons">restore</FontIcon>;
-const manageIcon = <FontIcon className="material-icons">build</FontIcon>;
-const chartIcon = <FontIcon className="material-icons">build</FontIcon>;
+const healthIcon = <FontIcon className="material-icons">list</FontIcon>
+const chartIcon = <FontIcon className="material-icons">face</FontIcon>
+const manageIcon = <FontIcon className="material-icons">build</FontIcon>
 
 const style = {
   bottom: '0',
