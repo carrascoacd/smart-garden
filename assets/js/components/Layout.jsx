@@ -3,9 +3,11 @@ import Slider from 'material-ui/Slider';
 import BottomNavigationBar from './BottomNavigationBar.jsx';
 import ManagementTab from './ManagementTab.jsx';
 import DashboardTab from './DashboardTab.jsx';
+import ChartsTab from './ChartsTab.jsx';
 
 const DASHBOARD_TAB = 0;
-const MANAGEMENT_TAB = 1;
+const CHART_TAB = 1;
+const MANAGEMENT_TAB = 2;
 
 export default class Layout extends React.Component {
 
@@ -36,18 +38,26 @@ export default class Layout extends React.Component {
   }
 
   render() {
+    let tab;
+    switch(this.state.tabSelected) {
+      case DASHBOARD_TAB:
+        tab = <DashboardTab device={this.state.device}/>
+        break;
+      case MANAGEMENT_TAB:
+        tab = <ManagementTab device={this.state.device}/>
+        break;
+      case CHART_TAB:
+        tab = <ChartsTab device={this.state.device}/>
+        break;
+    }
     return (
       <div>
-        {this.state.device != null && 
+        {
           <div>
-            {this.state.tabSelected == DASHBOARD_TAB ? (
-              <DashboardTab device={this.state.device}/>
-            ) : (
-              <ManagementTab device={this.state.device}/>
-            )}
+            { this.state.device != null && tab } 
             <BottomNavigationBar onTabChange={this.switchTab.bind(this)} />
           </div>
-        }
+        } 
       </div>
     );
   }

@@ -17,37 +17,32 @@ export default class DeviceCharts extends React.Component {
   }
 
   componentDidMount() {
-    this.getDeviceList()
+    this.getWeatherEntries()
   }
 
-  getDeviceList(){
-    fetch('/api/devices').then((response)=>{
+  getWeatherEntries(){
+    fetch(`/api/devices/${this.props.device.id}/weather_entries`).then((response)=>{
       return response.json();
     }).then((data)=>{
-      var moistureData = this.generateMoistureChartData(data.deviceList)
-      var voltageData = this.generateVoltageChartData(data.deviceList)
-      this.setState({voltageData : voltageData, moistureData: moistureData})
+      var moistureData = this.generateMoistureChartData(data.weatherEntries)
+      var voltageData = this.generateVoltageChartData(data.weatherEntries)
+      this.setState({voltageData: voltageData, moistureData: moistureData})
     }).catch((err)=>{
       console.log(err);
     });
   }
 
-  generateMoistureChartData(deviceList){
-    var chartData = _.map(deviceList, function(device){
-      return _.map(device.weatherEntries, function(entry){
-        return {x: entry.createdAt, y: entry.moisture}
-      })
+
+  generateMoistureChartData(weatherEntries){
+    return _.map(weatherEntries, function(entry){
+      return {x: entry.createdAt, y: entry.moisture}
     })
-    return chartData
   }
 
-  generateVoltageChartData(deviceList){
-    var chartData = _.map(deviceList, function(device){
-      return _.map(device.weatherEntries, function(entry){
-        return {x: entry.createdAt, y: entry.currentVoltage}
-      })
+  generateVoltageChartData(weatherEntries){
+    return _.map(weatherEntries, function(entry){
+      return {x: entry.createdAt, y: entry.mainVoltage}
     })
-    return chartData
   }
 
   render() {

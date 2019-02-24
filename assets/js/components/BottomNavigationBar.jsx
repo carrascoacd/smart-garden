@@ -5,6 +5,7 @@ import Paper from 'material-ui/Paper';
 
 const healthIcon = <FontIcon className="material-icons">restore</FontIcon>;
 const manageIcon = <FontIcon className="material-icons">build</FontIcon>;
+const chartIcon = <FontIcon className="material-icons">build</FontIcon>;
 
 const style = {
   bottom: '0',
@@ -37,9 +38,14 @@ export default class BottomNavigationBar extends Component {
             onTouchTap={() => this.select(0)}
           />
           <BottomNavigationItem
+            label="Charts"
+            icon={chartIcon}
+            onTouchTap={() => this.select(1)}
+          />
+          <BottomNavigationItem
             label="Manage"
             icon={manageIcon}
-            onTouchTap={() => this.select(1)}
+            onTouchTap={() => this.select(2)}
           />
         </BottomNavigation>
       </Paper>

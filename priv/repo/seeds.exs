@@ -16,16 +16,24 @@ alias SmartGarden.Repo
 
 device = Repo.insert!(Device.changeset(%Device{}, %{name: "Arduino Device"}))
 Repo.insert!(Interval.changeset(%Interval{},
-  %{device_id: device.id, 
-    value: 1, 
-    name: "polling", 
-    execution_schedule: "* * * * *", 
-    active: true, 
+  %{device_id: device.id,
+    value: 1,
+    name: "polling",
+    execution_schedule: "* * * * *",
+    active: true,
     action: "polling"}))
-Repo.insert!(Interval.changeset(%Interval{}, 
-  %{device_id: device.id, 
-    value: 1, 
-    name: "irrigation", 
-    execution_schedule: "* * * * *", 
-    active: true, 
+Repo.insert!(Interval.changeset(%Interval{},
+  %{device_id: device.id,
+    value: 1,
+    name: "irrigation",
+    execution_schedule: "* * * * *",
+    active: true,
     action: "open-valve"}))
+
+changeset = %WeatherEntry{
+  moisture: 1000.0,
+  temperature: 35.0,
+  humidity: 30.0,
+  device: device
+}
+weather_entry = Repo.insert!(changeset)

@@ -20,7 +20,7 @@
     "rc-time-picker": "^3.3.0",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
-    "react-easy-chart": "^0.1.12",
+    "react-easy-chart": "^0.1.16",
     "react-faux-dom": "^2.5.0",
     "react-responsive": "^1.2.10",
     "react-tap-event-plugin": "^2.0.1",
