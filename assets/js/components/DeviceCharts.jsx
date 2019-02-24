@@ -38,7 +38,7 @@ export default class DeviceCharts extends React.Component {
     }).then((data)=>{      
       var moistureData = this.generateMoistureChartData(data.weatherEntries)
       var voltageData = this.generateVoltageChartData(data.weatherEntries)
-      this.setState({data: [moistureData]})
+      this.setState({data: [moistureData, voltageData]})
     }).catch((err)=>{
       console.log(err);
     });
