@@ -66,14 +66,13 @@ export default class DeviceCharts extends React.Component {
             xType={'time'}
             // axes={(this.state.windowWidth) > 800 ? true : false}
             axes
-            dataPoints
             grid
             datePattern={'%Y-%M-%d %H:%m:%S'}
             areaColors={['green', 'blue']}
             tickTimeDisplayFormat={'%m-%d %H'}
             yDomainRange={[0, 5000]}
             interpolate={'cardinal'}
-            width={this.state.windowWidth}
+            width={this.state.windowWidth * 1.35}
             height={(this.state.windowWidth) > 800 ? this.state.windowWidth / 2.2 : this.state.windowWidth}
             data={this.state.data}
           />
