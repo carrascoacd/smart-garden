@@ -38,7 +38,7 @@ export default class DeviceCharts extends React.Component {
     }).then((data)=>{      
       var moistureData = this.generateMoistureChartData(data.weatherEntries)
       var voltageData = this.generateVoltageChartData(data.weatherEntries)
-      this.setState({data: [moistureData, voltageData]})
+      this.setState({data: [moistureData]})
     }).catch((err)=>{
       console.log(err);
     });
@@ -46,13 +46,15 @@ export default class DeviceCharts extends React.Component {
 
   generateMoistureChartData(weatherEntries){
     return _.map(weatherEntries, function(entry){
-      return {x: entry.createdAt, y: entry.moisture}
+      let date = moment(entry.createdAt).format('YYYY-MM-DD hh:mm:ss')
+      return {x: date, y: entry.moisture}
     })
   }
 
   generateVoltageChartData(weatherEntries){
     return _.map(weatherEntries, function(entry){
-      return {x: entry.createdAt, y: entry.mainVoltage}
+      let date = moment(entry.createdAt).format('YYYY-MM-DD hh:mm:ss')
+      return {x: date, y: entry.mainVoltage}
     })
   }
 
@@ -65,15 +67,14 @@ export default class DeviceCharts extends React.Component {
             // axes={(this.state.windowWidth) > 800 ? true : false}
             axes
             dataPoints
-            yTicks={3}
             grid
-            datePattern={'%Y-%m-%dT%H:%M:%S.%LZ'}
+            datePattern={'%Y-%M-%d %H:%m:%S'}
             areaColors={['green', 'blue']}
             tickTimeDisplayFormat={'%m-%d %H'}
             yDomainRange={[0, 5000]}
             interpolate={'cardinal'}
             width={this.state.windowWidth}
-            height={(this.state.windowWidth) > 800 ? this.state.windowWidth / 3 : this.state.windowWidth}
+            height={(this.state.windowWidth) > 800 ? this.state.windowWidth / 2.2 : this.state.windowWidth}
             data={this.state.data}
           />
            <Legend
