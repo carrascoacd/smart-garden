@@ -60,8 +60,20 @@ export default class DeviceCharts extends React.Component {
 
   render() {
     return (
-      <div style={center}>
-        <div>
+      <div>
+        <iframe 
+          src="https://carrascoacd.grafana.net/d-solo/9mXu_Lrmz/main?orgId=1&panelId=4&output=embed" 
+          width={(this.state.windowWidth) > 800 ? this.state.windowWidth : this.state.windowWidth * 1.4}
+          height="200" 
+          frameBorder="0">
+        </iframe>
+        <iframe src="https://carrascoacd.grafana.net/d-solo/9mXu_Lrmz/main?orgId=1&panelId=2" 
+          width={(this.state.windowWidth) > 800 ? this.state.windowWidth : this.state.windowWidth * 1.4}   
+          height="200" 
+          frameBorder="0">
+        </iframe>
+    
+        {/* <div>
           <AreaChart
             xType={'time'}
             // axes={(this.state.windowWidth) > 800 ? true : false}
@@ -88,7 +100,7 @@ export default class DeviceCharts extends React.Component {
             dataId={'key'}
             horizontal
           />
-        </div>
+        </div> */}
       </div>
     );
   }
