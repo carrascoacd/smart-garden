@@ -37,11 +37,11 @@ export default class BottomNavigationBar extends Component {
             icon={healthIcon}
             onTouchTap={() => this.select(0)}
           />
-          <BottomNavigationItem
+          {/* <BottomNavigationItem
             label="Charts"
             icon={chartIcon}
             onTouchTap={() => this.select(1)}
-          />
+          /> */}
           <BottomNavigationItem
             label="Manage"
             icon={manageIcon}

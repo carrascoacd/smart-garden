@@ -63,12 +63,12 @@ export default class DeviceCharts extends React.Component {
       <div>
         <iframe 
           src="https://carrascoacd.grafana.net/d-solo/9mXu_Lrmz/main?orgId=1&panelId=4&output=embed" 
-          width={(this.state.windowWidth) > 800 ? this.state.windowWidth : this.state.windowWidth * 1.4}
+          width={(this.state.windowWidth) > 800 ? this.state.windowWidth : this.state.windowWidth * 1.31}
           height="200" 
           frameBorder="0">
         </iframe>
         <iframe src="https://carrascoacd.grafana.net/d-solo/9mXu_Lrmz/main?orgId=1&panelId=2" 
-          width={(this.state.windowWidth) > 800 ? this.state.windowWidth : this.state.windowWidth * 1.4}   
+          width={(this.state.windowWidth) > 800 ? this.state.windowWidth : this.state.windowWidth * 1.31}   
           height="200" 
           frameBorder="0">
         </iframe>
