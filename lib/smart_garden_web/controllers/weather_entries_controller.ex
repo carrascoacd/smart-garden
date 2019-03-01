@@ -27,16 +27,22 @@ defmodule SmartGardenWeb.WeatherEntriesController do
       "device_id" => device_id
     }
     changeset = WeatherEntry.changeset(%WeatherEntry{}, weather_entry_data)
-    case Repo.insert(changeset) do
-      {:ok, _weather_entry} ->
-        device = Repo.get!(Device, device_id)
-        interval = SmartGarden.IntervalCalculator.next_interval_for device
-        conn 
-          |> put_status(:created) 
-          |> render("create.json", interval: interval)
-      {:error, _changeset} ->
-        json conn |> put_status(:bad_request), %{errors: ["unable to create weather_entry"] }
+    device = Repo.get!(Device, device_id)
+    interval = SmartGarden.IntervalCalculator.next_interval_for device
+
+    if WeatherEntry.recent_insertion(device_id) do
+      conn 
+        |> put_status(:ok) 
+        |> render("create.json", interval: interval)
+    else
+      case Repo.insert(changeset) do
+        {:ok, _weather_entry} ->
+          conn 
+            |> put_status(:created) 
+            |> render("create.json", interval: interval)
+        {:error, _changeset} ->
+          json conn |> put_status(:bad_request), %{errors: ["unable to create weather_entry"] }
+      end
     end
   end
-
 end

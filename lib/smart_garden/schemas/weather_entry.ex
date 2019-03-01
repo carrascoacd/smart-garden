@@ -16,13 +16,18 @@ defmodule SmartGarden.WeatherEntry do
   end
 
   def get_all_by_device(device_id, limit \\ 100) do
-    query = from(i in WeatherEntry,
-              where: i.device_id == ^device_id,
-              order_by: [desc: i.inserted_at],
-              limit: ^limit)
-    query
-      |> SmartGarden.Repo.all
+    SmartGarden.Repo.all(all_query(device_id, limit))
   end
+
+  def recent_insertion(device_id) do
+     case SmartGarden.Repo.one(all_query(device_id, 1)) do
+      nil -> 
+        false
+      entry -> 
+        diff = NaiveDateTime.diff(NaiveDateTime.utc_now(), entry.inserted_at)
+        diff < 15 * 60
+    end
+  end 
 
   def changeset(%WeatherEntry{} = weather_entry, attrs) do
     weather_entry
@@ -30,4 +35,10 @@ defmodule SmartGarden.WeatherEntry do
     |> validate_required([:moisture, :temperature, :humidity, :device_id])
   end
 
+  defp all_query(device_id, limit) do
+    from(i in WeatherEntry,
+      where: i.device_id == ^device_id,
+      order_by: [desc: i.inserted_at],
+      limit: ^limit)
+  end
 end

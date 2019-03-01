@@ -11,6 +11,8 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
   end
 
   test "create weather_entry", %{conn: conn, device: device} do
+    Repo.delete_all(WeatherEntry)
+
     changeset = %Interval{
       name: "Wait 1000", 
       value: 1000,
@@ -21,6 +23,33 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
     weather_entry_params = %{m: 1000, h: 99, t: 35, mv: 3600, sv: 3500}
     conn = post conn, device_weather_entries_path(conn, :create, device.id), w: weather_entry_params
     assert json_response(conn, 201) == %{
+      "action" => "polling",
+      "value" => 1000
+    }
+  end
+
+  @tag here: true
+  test "does not create weather_entry as it detects a recent insert", %{conn: conn, device: device} do
+    Repo.delete_all(WeatherEntry)
+
+    changeset = %Interval{
+      name: "Wait 1000", 
+      value: 1000,
+      action: "polling", 
+      device: device, 
+      execution_schedule: "* * * * *"}
+    Repo.insert! changeset
+
+    weather_entry_params = %{m: 1000, h: 99, t: 35, mv: 3600, sv: 3500}
+
+    conn = post(conn, device_weather_entries_path(conn, :create, device.id), w: weather_entry_params)
+    assert json_response(conn, 201) == %{
+      "action" => "polling",
+      "value" => 1000
+    }
+
+    conn = post(conn, device_weather_entries_path(conn, :create, device.id), w: weather_entry_params)
+    assert json_response(conn, 200) == %{
       "action" => "polling",
       "value" => 1000
     }
@@ -42,10 +71,11 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
 
   def weather_entry_json(weather_entry) do
     %{
-      "moisture" => weather_entry.moisture,
-      "humidity" => weather_entry.humidity,
-      "temperature" => weather_entry.temperature,
-      "currentVoltage" => 0,
+      "moisture" => round(weather_entry.moisture),
+      "humidity" => round(weather_entry.humidity),
+      "temperature" => round(weather_entry.temperature),
+      "mainVoltage" => 0,
+      "secondaryVoltage" => 0,
       "createdAt" => NaiveDateTime.to_string weather_entry.inserted_at
     }
   end
