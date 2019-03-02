@@ -6,12 +6,23 @@ defmodule SmartGarden.WeatherEntry do
   alias SmartGarden.WeatherEntry
   alias SmartGarden.Repo
 
+  @allowed_params [
+    :moisture, 
+    :temperature, 
+    :humidity, 
+    :device_id, 
+    :main_voltage, 
+    :secondary_voltage,
+    :volume
+  ]
+
   schema "weather_entries" do
-    field :moisture, :float
-    field :temperature, :float
-    field :humidity, :float
-    field :main_voltage, :integer
-    field :secondary_voltage, :integer
+    field :moisture, :float, default: 0.0
+    field :temperature, :float, default: 0.0
+    field :humidity, :float, default: 0.0
+    field :main_voltage, :integer, default: 0
+    field :secondary_voltage, :integer, default: 0
+    field :volume, :float, default: 0.0
     belongs_to :device, SmartGarden.Device
     timestamps()
   end
@@ -35,7 +46,7 @@ defmodule SmartGarden.WeatherEntry do
 
   def changeset(%WeatherEntry{} = weather_entry, attrs) do
     weather_entry
-    |> cast(attrs, [:moisture, :temperature, :humidity, :device_id, :main_voltage, :secondary_voltage])
+    |> cast(attrs, @allowed_params)
     |> validate_required([:moisture, :temperature, :humidity, :device_id])
   end
 
