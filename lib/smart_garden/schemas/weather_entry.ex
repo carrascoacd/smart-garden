@@ -35,20 +35,31 @@ defmodule SmartGarden.WeatherEntry do
     Repo.one(all_query(device_id, 1))
   end
 
-  def recent_insertion(device_id) do
-     case get_last(device_id) do
-      nil -> 
-        false
-      entry -> 
-        NaiveDateTime.diff(NaiveDateTime.utc_now(), entry.inserted_at) <= 15 * 60
+  def maybe_insert(changeset = %{changes: %{device_id: device_id}}) do
+    Repo.transaction fn ->
+      if recent_insertion(device_id) do
+        Repo.rollback(changeset)
+      else
+        {:ok, weather_entry} = Repo.insert(changeset)
+        weather_entry
+      end
     end
-  end 
+  end
 
   def changeset(%WeatherEntry{} = weather_entry, attrs) do
     weather_entry
     |> cast(attrs, @allowed_params)
     |> validate_required([:moisture, :temperature, :humidity, :device_id])
   end
+
+  defp recent_insertion(device_id) do
+    case get_last(device_id) do
+     nil -> 
+       false
+     entry -> 
+       NaiveDateTime.diff(NaiveDateTime.utc_now(), entry.inserted_at) <= 15 * 60
+   end
+  end 
 
   defp all_query(device_id, limit) do
     from(i in WeatherEntry,
