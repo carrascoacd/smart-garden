@@ -1,12 +1,19 @@
 defmodule SmartGardenWeb.IntervalController do
   use SmartGardenWeb, :controller
 
-  alias SmartGarden.{Repo, Interval}
+  alias SmartGarden.{Repo, Interval, Device}
 
   def index(conn, %{"device_id" => device_id}) do
     intervals = Interval.get_all_by_device device_id
     conn 
       |> render("index.json", intervals: intervals)
+  end
+
+  def show(conn, %{"device_id" => device_id, "id" => "next"}) do
+    device = Repo.get!(Device, device_id)
+    interval = SmartGarden.IntervalCalculator.next_interval_for(device)
+    conn 
+      |> render("show.json", interval: interval)
   end
 
   def show(conn, %{"device_id" => _device_id, "id" => id}) do
@@ -44,5 +51,4 @@ defmodule SmartGardenWeb.IntervalController do
           |> render("error.json", changeset: changeset)
     end
   end
-
 end
