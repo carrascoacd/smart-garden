@@ -31,7 +31,6 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
     }
   end
 
-  @tag :skip
   test "does not create weather_entry as it detects a recent insert", %{conn: conn, device: device} do
     Repo.delete_all(WeatherEntry)
 

@@ -31,7 +31,7 @@ defmodule SmartGardenWeb.WeatherEntriesController do
     device = Repo.get!(Device, device_id)
     interval = SmartGarden.IntervalCalculator.next_interval_for(device)
 
-    case Repo.insert(changeset) do
+    case WeatherEntry.maybe_insert(changeset) do
       {:ok, _weather_entry} ->
         conn 
           |> put_status(:created) 
