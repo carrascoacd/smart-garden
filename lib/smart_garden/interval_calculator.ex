@@ -7,17 +7,26 @@ defmodule SmartGarden.IntervalCalculator do
       |> SmartGarden.Repo.one
     control_interval = from(i in SmartGarden.Interval, 
                         where: i.device_id == ^device.id and 
-                        i.action != "polling" and i.active == true)
+                        i.action != "polling")
       |> SmartGarden.Repo.one
     
-    if control_interval != nil and interval_matches_date?(control_interval, NaiveDateTime.utc_now) do
+    choose_interval(control_interval, polling_interval)
+  end
+
+  defp choose_interval(nil = _control_interval, polling_interval), do: polling_interval
+  defp choose_interval(%{force_open: true} = control_interval, _polling_interval) do
+    control_interval
+  end
+  defp choose_interval(%{active: false} , polling_interval), do: polling_interval
+  defp choose_interval(control_interval, polling_interval) do
+    if interval_matches_date?(control_interval, NaiveDateTime.utc_now) do
       control_interval
     else
       polling_interval
     end
   end
 
-  def interval_matches_date?(interval, date) do
+  defp interval_matches_date?(interval, date) do
     cron_execution_schedule = Crontab.CronExpression.Parser.parse! interval.execution_schedule
     interval_hour = if cron_execution_schedule.hour == [:*] do
       date.hour
@@ -44,5 +53,4 @@ defmodule SmartGarden.IntervalCalculator do
       Time.compare(time, max_interval_time) == :eq or
       Time.compare(time, max_interval_time) == :eq
   end
-
 end

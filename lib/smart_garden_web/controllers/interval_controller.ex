@@ -1,9 +1,7 @@
 defmodule SmartGardenWeb.IntervalController do
   use SmartGardenWeb, :controller
 
-  alias SmartGarden.Repo
-  alias SmartGarden.Device
-  alias SmartGarden.Interval
+  alias SmartGarden.{Repo, Interval}
 
   def index(conn, %{"device_id" => device_id}) do
     intervals = Interval.get_all_by_device device_id

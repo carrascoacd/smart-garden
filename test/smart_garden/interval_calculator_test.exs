@@ -89,4 +89,24 @@ defmodule SmartGarden.IntervalCalculatorTest do
     assert next_interval.id == polling_interval.id
   end
 
+  test "return the control interval if force open is true", %{current_time: current_time} do
+    device = SmartGarden.Repo.insert! %SmartGarden.Device{name: "Arduino"}
+    control_interval = SmartGarden.Repo.insert! %SmartGarden.Interval{
+      device: device, 
+      name: "action", 
+      action: "open-valve", 
+      execution_schedule: "#{current_time.minute} #{current_time.hour} * * *",
+      active: false,
+      force_open: true
+    }
+    polling_time = Time.add(current_time, 60, :seconds)
+    SmartGarden.Repo.insert! %SmartGarden.Interval{
+      device: device, 
+      name: "polling", 
+      action: "polling", 
+      execution_schedule: "#{polling_time.minute} #{polling_time.hour} * * *"
+    }
+    next_interval = SmartGarden.IntervalCalculator.next_interval_for device
+    assert next_interval.id == control_interval.id
+  end
 end

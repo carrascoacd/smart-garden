@@ -7,6 +7,7 @@ import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 import { List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import Toggle from 'material-ui/Toggle';
 
 const styles = {
   container: {
@@ -22,6 +23,9 @@ const styles = {
   item: {
     flexGrow: 1,
     width: "100%",
+  },
+  toggle: {
+    marginBottom: 16,
   },
 }
 
@@ -66,7 +70,8 @@ export default class ManagementTab extends Component {
       interval: {
         value: interval.value * 60 * 1000, 
         execution_schedule: executionSchedule,
-        active: interval.days.length > 0
+        active: interval.days.length > 0,
+        force_open: interval.forceOpen
       }
     })
     let headers = new Headers()
@@ -102,7 +107,8 @@ export default class ManagementTab extends Component {
       id: interval.id,
       date: date,
       value: interval.value / 60 / 1000,
-      days: days
+      days: days,
+      forceOpen: interval.force_open
     }
   }
 
@@ -122,6 +128,13 @@ export default class ManagementTab extends Component {
 
   onChangeControlHour(event, date) {
     this.state.controlInterval.date = date
+    this.updateInterval(this.state.controlInterval, (data) => {
+      this.setState({controlInterval: this.state.controlInterval})
+    })
+  }
+
+  onChangeForceOpen(event, value) {
+    this.state.controlInterval.forceOpen = value
     this.updateInterval(this.state.controlInterval, (data) => {
       this.setState({controlInterval: this.state.controlInterval})
     })
@@ -147,7 +160,11 @@ export default class ManagementTab extends Component {
           <Subheader>Polling interval</Subheader>
           {this.state.pollingInterval &&
             <ListItem>
-              <IntervalSlider maxValue={480} unit="min" value={this.state.pollingInterval.value} onChange={this.onChangePollingValue.bind(this)} />
+              <IntervalSlider 
+                maxValue={480} 
+                unit="min" 
+                value={this.state.pollingInterval.value} 
+                onChange={this.onChangePollingValue.bind(this)} />
             </ListItem>
           }
         </List>
@@ -156,7 +173,11 @@ export default class ManagementTab extends Component {
           {
             this.state.controlInterval &&
             <ListItem>
-              <IntervalSlider maxValue={200} unit="min" value={this.state.controlInterval.value} onChange={this.onChangeControlValue.bind(this)} />
+              <IntervalSlider 
+                maxValue={200} 
+                unit="min" 
+                value={this.state.controlInterval.value} 
+                onChange={this.onChangeControlValue.bind(this)} />
             </ListItem>
           }
         </List>
@@ -166,7 +187,24 @@ export default class ManagementTab extends Component {
           {
             this.state.controlInterval &&
             <ListItem>
-              <TimePicker onChange={this.onChangeControlHour.bind(this)} name="hour" value={this.state.controlInterval.date} />
+              <TimePicker 
+                onChange={this.onChangeControlHour.bind(this)}
+                name="hour" 
+                value={this.state.controlInterval.date} />
+            </ListItem>
+          }
+        </List>
+        <Divider />
+        <List style={styles.item}>
+          <Subheader>Forces to open the valve</Subheader>
+          {
+            this.state.controlInterval &&
+            <ListItem>
+              <Toggle
+                style={styles.toggle}
+                onToggle={this.onChangeForceOpen.bind(this)}
+                toggled={this.state.controlInterval.forceOpen}
+              />
             </ListItem>
           }
         </List>

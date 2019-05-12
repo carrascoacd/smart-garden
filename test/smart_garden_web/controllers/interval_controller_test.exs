@@ -47,7 +47,8 @@ defmodule SmartGardenWeb.IntervalDeviceControllerTest do
       "value" => round(interval.value),
       "action" => interval.action,
       "execution_schedule" => execution_schedule,
-      "active" => interval.active
+      "active" => interval.active,
+      "force_open" => interval.force_open
     }
   end
 
