@@ -13,7 +13,8 @@ defmodule SmartGarden.WeatherEntry do
     :device_id, 
     :main_voltage, 
     :secondary_voltage,
-    :volume
+    :volume,
+    :state
   ]
 
   schema "weather_entries" do
@@ -23,6 +24,7 @@ defmodule SmartGarden.WeatherEntry do
     field :main_voltage, :integer, default: 0
     field :secondary_voltage, :integer, default: 0
     field :volume, :float, default: 0.0
+    field :state, :string
     belongs_to :device, SmartGarden.Device
     timestamps()
   end
@@ -47,10 +49,15 @@ defmodule SmartGarden.WeatherEntry do
   end
 
   def changeset(%WeatherEntry{} = weather_entry, attrs) do
+    attrs = %{attrs | "state" => map_state(attrs["state"])}
+
     weather_entry
     |> cast(attrs, @allowed_params)
     |> validate_required([:moisture, :temperature, :humidity, :device_id])
   end
+  
+  defp map_state(_state_value = 0), do: "close"
+  defp map_state(_state_value), do: "open"
 
   defp recent_insertion(device_id) do
     case get_last(device_id) do

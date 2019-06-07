@@ -1,7 +1,7 @@
 defmodule SmartGarden.IntervalCalculator do
   import Ecto.Query
 
-  def next_interval_for(device) do
+  def next_interval_for(device, state) do
     polling_interval = from(i in SmartGarden.Interval, 
                         where: i.device_id == ^device.id and i.action == "polling")
       |> SmartGarden.Repo.one
@@ -10,19 +10,23 @@ defmodule SmartGarden.IntervalCalculator do
                         i.action != "polling")
       |> SmartGarden.Repo.one
     
-    choose_interval(control_interval, polling_interval)
+    choose_interval(control_interval, polling_interval, state)
   end
 
-  defp choose_interval(nil = _control_interval, polling_interval), do: polling_interval
-  defp choose_interval(%{force_open: true} = control_interval, _polling_interval) do
-    control_interval
+  defp choose_interval(nil = _control_interval, polling_interval, _state), do: polling_interval
+  defp choose_interval(%{force_open: true} = _control_interval, polling_interval, _state) do
+    %{polling_interval | action: "open-valve"}
   end
-  defp choose_interval(%{active: false} , polling_interval), do: polling_interval
-  defp choose_interval(control_interval, polling_interval) do
-    if interval_matches_date?(control_interval, NaiveDateTime.utc_now) do
-      control_interval
-    else
-      polling_interval
+  defp choose_interval(%{active: false} , polling_interval, _state), do: polling_interval
+  defp choose_interval(control_interval, polling_interval, state) do
+    matches_date? = interval_matches_date?(control_interval, NaiveDateTime.utc_now)
+    case {matches_date?, state} do
+      {true, "close"} ->
+        %{polling_interval | action: "open-valve"}
+      {false, "open"} ->
+        %{polling_interval | action: "close-valve"}
+      _otherwise ->
+        polling_interval
     end
   end
 

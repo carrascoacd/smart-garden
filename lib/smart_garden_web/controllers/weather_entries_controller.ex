@@ -25,11 +25,12 @@ defmodule SmartGardenWeb.WeatherEntriesController do
       "main_voltage" => Map.get(weather_entry_params, "mv", 0),
       "secondary_voltage" => Map.get(weather_entry_params, "sv", 0),
       "volume" => Map.get(weather_entry_params, "v", 0.0),
+      "state" => Map.get(weather_entry_params, "st", 0),
       "device_id" => device_id
     }
     changeset = WeatherEntry.changeset(%WeatherEntry{}, weather_entry_data)
     device = Repo.get!(Device, device_id)
-    interval = SmartGarden.IntervalCalculator.next_interval_for(device)
+    interval = SmartGarden.IntervalCalculator.next_interval_for(device, changeset.changes.state)
 
     case WeatherEntry.maybe_insert(changeset) do
       {:ok, _weather_entry} ->
