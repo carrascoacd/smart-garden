@@ -9,9 +9,9 @@ defmodule SmartGardenWeb.IntervalController do
       |> render("index.json", intervals: intervals)
   end
 
-  def show(conn, %{"device_id" => device_id, "id" => "next"}) do
+  def show(conn, %{"device_id" => device_id, "id" => "next", "state" => state}) do
     device = Repo.get!(Device, device_id)
-    interval = SmartGarden.IntervalCalculator.next_interval_for(device)
+    interval = SmartGarden.IntervalCalculator.next_interval_for(device, state)
     conn 
       |> render("show.json", interval: interval)
   end

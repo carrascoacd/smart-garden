@@ -3,7 +3,7 @@ defmodule SmartGarden.Repo.Migrations.AddStateToWeatherEntry do
 
   def change do
     alter table(:weather_entries) do
-      add :state, :string, default: "polling"
+      add :state, :string, default: "close"
     end
   end
 end
