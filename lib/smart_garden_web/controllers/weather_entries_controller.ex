@@ -5,6 +5,8 @@ defmodule SmartGardenWeb.WeatherEntriesController do
   alias SmartGarden.Device
   alias SmartGarden.WeatherEntry
 
+  plug Plug.Logger, log: :debug
+
   def index(conn, %{"device_id" => device_id}) do
     weather_entries = WeatherEntry.get_all_by_device device_id
     conn 
@@ -18,7 +20,6 @@ defmodule SmartGardenWeb.WeatherEntriesController do
   end
 
   def create(conn, %{"device_id" => device_id, "w" => weather_entry_params}) do
-    IO.inspect(weather_entry_params, label: "params")
     weather_entry_data = %{
       "moisture" => Map.get(weather_entry_params, "m"),
       "humidity" => Map.get(weather_entry_params, "h"),
