@@ -18,6 +18,7 @@ defmodule SmartGardenWeb.WeatherEntriesController do
   end
 
   def create(conn, %{"device_id" => device_id, "w" => weather_entry_params}) do
+    IO.inspect(weather_entry_params, label: "params")
     weather_entry_data = %{
       "moisture" => Map.get(weather_entry_params, "m"),
       "humidity" => Map.get(weather_entry_params, "h"),
