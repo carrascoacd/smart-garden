@@ -114,7 +114,7 @@ defmodule SmartGarden.IntervalCalculatorTest do
     assert next_interval.action == "open-valve"
   end
 
-  test "return the control interval with for state open", %{current_time: current_time} do
+  test "return the control interval for state open", %{current_time: current_time} do
     device = SmartGarden.Repo.insert! %SmartGarden.Device{name: "Arduino"}
     SmartGarden.Repo.insert! %SmartGarden.Interval{
       device: device, 
@@ -133,5 +133,26 @@ defmodule SmartGarden.IntervalCalculatorTest do
     next_interval = SmartGarden.IntervalCalculator.next_interval_for(device, "open")
     assert next_interval.id == polling_interval.id
     assert next_interval.action == "close-valve"
+  end
+
+  test "return the control interval with state reset", %{current_time: current_time} do
+    device = SmartGarden.Repo.insert! %SmartGarden.Device{name: "Arduino"}
+    SmartGarden.Repo.insert! %SmartGarden.Interval{
+      device: device, 
+      name: "action", 
+      action: "reset",
+      value: 0,
+      execution_schedule: "#{current_time.minute} #{current_time.hour} * * *"
+    }
+    polling_time = Time.add(current_time, 60, :seconds)
+    polling_interval = SmartGarden.Repo.insert! %SmartGarden.Interval{
+      device: device, 
+      name: "polling", 
+      action: "polling", 
+      execution_schedule: "#{polling_time.minute} #{polling_time.hour} * * *"
+    }
+    next_interval = SmartGarden.IntervalCalculator.next_interval_for(device, "open")
+    assert next_interval.id == polling_interval.id
+    assert next_interval.action == "reset"
   end
 end

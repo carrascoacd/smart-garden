@@ -17,6 +17,9 @@ defmodule SmartGarden.IntervalCalculator do
   defp choose_interval(%{force_open: true} = _control_interval, polling_interval, _state) do
     %{polling_interval | action: "open-valve"}
   end
+  defp choose_interval(%{action: "reset"} = _control_interval, polling_interval, _state) do
+    %{polling_interval | action: "reset"}
+  end
   defp choose_interval(%{active: false} , polling_interval, _state), do: polling_interval
   defp choose_interval(control_interval, polling_interval, state) do
     matches_date? = interval_matches_date?(control_interval, NaiveDateTime.utc_now)
