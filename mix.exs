@@ -20,7 +20,7 @@ defmodule SmartGarden.Mixfile do
   def application do
     [
       mod: {SmartGarden.Application, []},
-      applications: [:logger, :runtime_tools, :crontab, :phoenix_ecto]
+      extra_applications: [:logger, :runtime_tools, :crontab, :phoenix_ecto]
     ]
   end
 
@@ -41,7 +41,7 @@ defmodule SmartGarden.Mixfile do
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.17"},
-      {:cowboy, "~> 1.0"},
+      {:plug_cowboy, "~> 2.0"},
       {:crontab, "~> 1.1.2"}
     ]
   end

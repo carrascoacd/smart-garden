@@ -34,8 +34,7 @@ export default class ManagementTab extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pollingInterval: null,
-      controlInterval: null
+      interval: null
     }
   }
 
@@ -47,15 +46,9 @@ export default class ManagementTab extends Component {
     fetch(`/api/devices/${this.props.device.id}/intervals`).then((response) => {
       return response.json();
     }).then((data) => {
-      let pollingIntervalData = _.find(data.intervals,
-        function (intervalData) { return intervalData.action == "polling" }
-      )
-      let pollingInterval = this.buildIntervalObject(pollingIntervalData)
-      let controlIntervalData = _.find(data.intervals,
-        function (intervalData) { return intervalData.action != "polling" }
-      )
-      let controlInterval = this.buildIntervalObject(controlIntervalData)
-      this.setState({ pollingInterval: pollingInterval, controlInterval: controlInterval })
+      let intervalData = data.intervals[0];
+      let interval = this.buildIntervalObject(intervalData)
+      this.setState({ interval: interval })
     }).catch((err) => {
       console.log(err)
     });
@@ -113,43 +106,43 @@ export default class ManagementTab extends Component {
   }
 
   onChangePollingValue(event, value) {
-    this.state.pollingInterval.value = value
-    this.updateInterval(this.state.pollingInterval, (data) => {
-      this.setState({pollingInterval: this.state.pollingInterval})
+    this.state.interval.value = value
+    this.updateInterval(this.state.interval, (data) => {
+      this.setState({interval: this.state.interval})
     })
   }
 
   onChangeControlValue(event, value) {
-    this.state.controlInterval.value = value
-    this.updateInterval(this.state.controlInterval, (data) => {
-      this.setState({controlInterval: this.state.controlInterval})
+    this.state.interval.value = value
+    this.updateInterval(this.state.interval, (data) => {
+      this.setState({interval: this.state.interval})
     })
   }
 
   onChangeControlHour(event, date) {
-    this.state.controlInterval.date = date
-    this.updateInterval(this.state.controlInterval, (data) => {
-      this.setState({controlInterval: this.state.controlInterval})
+    this.state.interval.date = date
+    this.updateInterval(this.state.interval, (data) => {
+      this.setState({interval: this.state.interval})
     })
   }
 
   onChangeForceOpen(event, value) {
-    this.state.controlInterval.forceOpen = value
-    this.updateInterval(this.state.controlInterval, (data) => {
-      this.setState({controlInterval: this.state.controlInterval})
+    this.state.interval.forceOpen = value
+    this.updateInterval(this.state.interval, (data) => {
+      this.setState({interval: this.state.interval})
     })
   }
 
   onCheckControlDay(event, isInputChecked) {
     let day = parseInt(event.target.value)
     if (isInputChecked == true){
-      this.state.controlInterval.days.push(day)
+      this.state.interval.days.push(day)
     }
     else {
-      this.state.controlInterval.days.splice(this.state.controlInterval.days.indexOf(day), 1)
+      this.state.interval.days.splice(this.state.interval.days.indexOf(day), 1)
     }
-    this.updateInterval(this.state.controlInterval, (data) => {
-      this.setState({controlInterval: this.state.controlInterval})
+    this.updateInterval(this.state.interval, (data) => {
+      this.setState({interval: this.state.interval})
     })
   }
 
@@ -158,12 +151,12 @@ export default class ManagementTab extends Component {
       <div style={styles.container}>
         <List style={styles.item}>
           <Subheader>Polling interval</Subheader>
-          {this.state.pollingInterval &&
+          {this.state.interval &&
             <ListItem>
               <IntervalSlider 
                 maxValue={480} 
                 unit="min" 
-                value={this.state.pollingInterval.value} 
+                value={this.state.interval.value} 
                 onChange={this.onChangePollingValue.bind(this)} />
             </ListItem>
           }
@@ -171,12 +164,12 @@ export default class ManagementTab extends Component {
         <List style={styles.item}>
           <Subheader>Open valve time</Subheader>
           {
-            this.state.controlInterval &&
+            this.state.interval &&
             <ListItem>
               <IntervalSlider 
                 maxValue={200} 
                 unit="min" 
-                value={this.state.controlInterval.value} 
+                value={this.state.interval.value} 
                 onChange={this.onChangeControlValue.bind(this)} />
             </ListItem>
           }
@@ -185,12 +178,12 @@ export default class ManagementTab extends Component {
         <List style={styles.item}>
           <Subheader>Open valve hour</Subheader>
           {
-            this.state.controlInterval &&
+            this.state.interval &&
             <ListItem>
               <TimePicker 
                 onChange={this.onChangeControlHour.bind(this)}
                 name="hour" 
-                value={this.state.controlInterval.date} />
+                value={this.state.interval.date} />
             </ListItem>
           }
         </List>
@@ -198,12 +191,12 @@ export default class ManagementTab extends Component {
         <List style={styles.item}>
           <Subheader>Forces to open the valve</Subheader>
           {
-            this.state.controlInterval &&
+            this.state.interval &&
             <ListItem>
               <Toggle
                 style={styles.toggle}
                 onToggle={this.onChangeForceOpen.bind(this)}
-                toggled={this.state.controlInterval.forceOpen}
+                toggled={this.state.interval.forceOpen}
               />
             </ListItem>
           }
@@ -211,7 +204,7 @@ export default class ManagementTab extends Component {
         <Divider />
         <List style={styles.item}>
           <Subheader>Open valve days</Subheader>
-          {this.state.controlInterval &&
+          {this.state.interval &&
             ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(function (day, i) {
               return (
                 <ListItem
@@ -223,7 +216,7 @@ export default class ManagementTab extends Component {
                       label={day}
                       value={i + 1}
                       onCheck={this.onCheckControlDay.bind(this)}
-                      checked={this.state.controlInterval.days.includes(i + 1)}
+                      checked={this.state.interval.days.includes(i + 1)}
                     />}
                 />
               )
