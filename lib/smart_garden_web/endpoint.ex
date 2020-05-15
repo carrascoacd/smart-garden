@@ -1,8 +1,6 @@
 defmodule SmartGardenWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :smart_garden
 
-  socket "/socket", SmartGardenWeb.UserSocket
-
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phoenix.digest
@@ -25,7 +23,7 @@ defmodule SmartGardenWeb.Endpoint do
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Poison
+    json_decoder: Phoenix.json_library()
 
   plug Plug.MethodOverride
   plug Plug.Head

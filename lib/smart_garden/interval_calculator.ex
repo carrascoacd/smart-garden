@@ -2,32 +2,19 @@ defmodule SmartGarden.IntervalCalculator do
   import Ecto.Query
 
   def next_interval_for(device, state) do
-    polling_interval = from(i in SmartGarden.Interval, 
-                        where: i.device_id == ^device.id and i.action == "polling")
-      |> SmartGarden.Repo.one
-    control_interval = from(i in SmartGarden.Interval, 
-                        where: i.device_id == ^device.id and 
-                        i.action != "polling")
-      |> SmartGarden.Repo.one
-    
-    choose_interval(control_interval, polling_interval, state)
+    interval = SmartGarden.Repo.one(
+      from(i in SmartGarden.Interval, where: i.device_id == ^device.id)
+    )
+    choose_interval(interval, state)
   end
 
-  defp choose_interval(nil = _control_interval, polling_interval, _state), do: polling_interval
-  defp choose_interval(%{force_open: true} = _control_interval, polling_interval, _state) do
-    %{polling_interval | action: "open-valve"}
-  end
-  defp choose_interval(%{action: "reset"} = _control_interval, polling_interval, _state) do
-    %{polling_interval | action: "reset"}
-  end
-  defp choose_interval(%{active: false} , polling_interval, _state), do: polling_interval
-  defp choose_interval(control_interval, polling_interval, state) do
-    matches_date? = interval_matches_date?(control_interval, NaiveDateTime.utc_now)
+  defp choose_interval(interval, state) do
+    matches_date? = interval_matches_date?(interval, NaiveDateTime.utc_now)
     case {matches_date?, state} do
-      {true, _state} ->
-        %{polling_interval | action: "open-valve"}
-      {false, _state} ->
-        %{polling_interval | action: "close-valve"}
+      {false, "open"} ->
+        %{interval | action: "close-valve"}
+      _otherwise ->
+        interval
     end
   end
 
@@ -49,7 +36,7 @@ defmodule SmartGarden.IntervalCalculator do
       cron_execution_schedule.weekday
     end
     min_interval_time = Time.from_erl!({interval_hour, interval_minute, 0})
-    max_interval_time = Time.add(min_interval_time, interval.value, :milliseconds)
+    max_interval_time = Time.add(min_interval_time, interval.value, :millisecond)
     time = NaiveDateTime.to_time date
 
     Enum.member?(interval_weekdays, Date.day_of_week(date)) and

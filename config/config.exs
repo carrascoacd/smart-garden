@@ -5,6 +5,8 @@
 # is restricted to this project.
 use Mix.Config
 
+config :phoenix, :json_library, Jason
+
 # General application configuration
 config :smart_garden,
   ecto_repos: [SmartGarden.Repo]
@@ -13,9 +15,7 @@ config :smart_garden,
 config :smart_garden, SmartGardenWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "rYUXYfFbW/3aUugpY9DHD+2g9G6mH9wUqh7j+hrJYIvgJZlf1qPb1y0VPcz3jJXr",
-  render_errors: [view: SmartGardenWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: SmartGarden.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  render_errors: [view: SmartGardenWeb.ErrorView, accepts: ~w(html json)]
 
 # Configures Elixir's Logger
 config :logger, :console,

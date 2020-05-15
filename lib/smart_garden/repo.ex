@@ -1,5 +1,5 @@
 defmodule SmartGarden.Repo do
-  use Ecto.Repo, otp_app: :smart_garden
+  use Ecto.Repo, otp_app: :smart_garden, adapter: Ecto.Adapters.Postgres
 
   @doc """
   Dynamically loads the repository url from the
