@@ -1,13 +1,21 @@
-import React, { Component } from 'react';
-import TimePicker from 'material-ui/TimePicker';
-import IntervalSlider from './IntervalSlider.jsx';
-import Checkbox from 'material-ui/Checkbox';
+import { List, ListItem } from 'material-ui/List';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
-import { List, ListItem } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
+import Checkbox from 'material-ui/Checkbox';
 import Divider from 'material-ui/Divider';
-import Toggle from 'material-ui/Toggle';
+import IntervalSlider from './IntervalSlider.jsx';
+import MenuItem from 'material-ui/MenuItem';
+import React, { Component } from 'react';
+import SelectField from 'material-ui/SelectField';
+import Subheader from 'material-ui/Subheader';
+import TimePicker from 'material-ui/TimePicker';
+
+const actionMapping = {
+  "open-valve" : 0,
+  "close-valve" : 1,
+  "reset" : 2,
+  "sleep" : 3
+}
 
 const styles = {
   container: {
@@ -64,7 +72,7 @@ export default class ManagementTab extends Component {
         value: interval.value * 60 * 1000, 
         execution_schedule: executionSchedule,
         active: interval.days.length > 0,
-        force_open: interval.forceOpen
+        action: interval.action
       }
     })
     let headers = new Headers()
@@ -101,7 +109,7 @@ export default class ManagementTab extends Component {
       date: date,
       value: interval.value / 60 / 1000,
       days: days,
-      forceOpen: interval.force_open
+      action: interval.action
     }
   }
 
@@ -126,8 +134,10 @@ export default class ManagementTab extends Component {
     })
   }
 
-  onChangeForceOpen(event, value) {
-    this.state.interval.forceOpen = value
+  onChangeAction(event, value) {
+    // Invert to get the key by value
+    let action = (_.invert(actionMapping))[value];
+    this.state.interval.action = action
     this.updateInterval(this.state.interval, (data) => {
       this.setState({interval: this.state.interval})
     })
@@ -149,6 +159,25 @@ export default class ManagementTab extends Component {
   render() {
     return (
       <div style={styles.container}>
+        <List style={styles.item}>
+          <Subheader>Next action to execute</Subheader>
+
+          {
+            this.state.interval &&
+            <ListItem>
+              <SelectField
+                value={actionMapping[this.state.interval.action]}
+                onChange={this.onChangeAction.bind(this)}
+              >
+                <MenuItem value={0} primaryText="Open valve" />
+                <MenuItem value={1} primaryText="Close valve" />
+                <MenuItem value={2} primaryText="Reset" />
+                <MenuItem value={3} primaryText="Sleep" />
+              </SelectField>
+            </ListItem>
+          }
+        </List>
+        <Divider />
         <List style={styles.item}>
           <Subheader>Polling interval</Subheader>
           {this.state.interval &&
@@ -184,20 +213,6 @@ export default class ManagementTab extends Component {
                 onChange={this.onChangeControlHour.bind(this)}
                 name="hour" 
                 value={this.state.interval.date} />
-            </ListItem>
-          }
-        </List>
-        <Divider />
-        <List style={styles.item}>
-          <Subheader>Forces to open the valve</Subheader>
-          {
-            this.state.interval &&
-            <ListItem>
-              <Toggle
-                style={styles.toggle}
-                onToggle={this.onChangeForceOpen.bind(this)}
-                toggled={this.state.interval.forceOpen}
-              />
             </ListItem>
           }
         </List>
