@@ -8,7 +8,7 @@ defmodule SmartGardenWeb.DeviceView do
   end
 
   def render("show.json", %{device: device}) do
-    device_json device
+    device_json(device)
   end
 
   def render("create.json", %{device: device}) do
@@ -21,7 +21,7 @@ defmodule SmartGardenWeb.DeviceView do
   def device_json(device) do
     %{
       name: device.name,
-      id: device.id,
+      id: device.id
       # weatherEntries: Enum.map(device.weather_entries, &weather_entry_json/1),
       # intervals: Enum.map(device.intervals, &interval_json/1)
     }
@@ -34,7 +34,7 @@ defmodule SmartGardenWeb.DeviceView do
       createdAt: NaiveDateTime.to_string(weather_entry.inserted_at)
     }
   end
-  
+
   def interval_json(interval) do
     %{
       name: interval.name,
@@ -43,5 +43,4 @@ defmodule SmartGardenWeb.DeviceView do
       execution_schedule: interval.execution_schedule
     }
   end
-
 end

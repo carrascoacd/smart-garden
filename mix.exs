@@ -6,9 +6,9 @@ defmodule SmartGarden.Mixfile do
       app: :smart_garden,
       version: "0.0.2",
       elixir: "~> 1.10.3",
-      elixirc_paths: elixirc_paths(Mix.env),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers,
-      start_permanent: Mix.env == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
     ]
@@ -26,7 +26,7 @@ defmodule SmartGarden.Mixfile do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
   #
@@ -36,6 +36,7 @@ defmodule SmartGarden.Mixfile do
       {:jason, "~> 1.2.1"},
       {:phoenix, "~> 1.4"},
       {:phoenix_ecto, "~> 4.0"},
+      {:phoenix_pubsub, "~> 2.0"},
       {:ecto_sql, "~> 3.4"},
       {:postgrex, "~> 0.15"},
       {:phoenix_html, "~> 2.10"},

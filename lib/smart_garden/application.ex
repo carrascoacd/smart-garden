@@ -10,10 +10,10 @@ defmodule SmartGarden.Application do
     children = [
       # Start the Ecto repository
       supervisor(SmartGarden.Repo, []),
+      # Pubsub needed for the reload of the app
+      {Phoenix.PubSub, [name: SmartGardenWeb.PubSub, adapter: Phoenix.PubSub.PG2]},
       # Start the endpoint when the application starts
-      supervisor(SmartGardenWeb.Endpoint, []),
-      # Start your own worker by calling: SmartGarden.Worker.start_link(arg1, arg2, arg3)
-      # worker(SmartGarden.Worker, [arg1, arg2, arg3]),
+      supervisor(SmartGardenWeb.Endpoint, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

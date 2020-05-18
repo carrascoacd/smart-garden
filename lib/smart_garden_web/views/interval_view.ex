@@ -1,5 +1,4 @@
 defmodule SmartGardenWeb.IntervalView do
-  
   use SmartGardenWeb, :view
 
   def render("show.json", %{interval: interval}) do
@@ -29,5 +28,4 @@ defmodule SmartGardenWeb.IntervalView do
       force_open: interval.force_open
     }
   end
-
 end

@@ -1,5 +1,4 @@
 defmodule SmartGardenWeb.WeatherEntriesView do
-  
   use SmartGardenWeb, :view
 
   def render("create.json", %{interval: interval}) do
@@ -30,5 +29,4 @@ defmodule SmartGardenWeb.WeatherEntriesView do
       createdAt: NaiveDateTime.to_string(weather_entry.inserted_at)
     }
   end
-
 end

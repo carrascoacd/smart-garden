@@ -15,7 +15,8 @@ config :smart_garden,
 config :smart_garden, SmartGardenWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "rYUXYfFbW/3aUugpY9DHD+2g9G6mH9wUqh7j+hrJYIvgJZlf1qPb1y0VPcz3jJXr",
-  render_errors: [view: SmartGardenWeb.ErrorView, accepts: ~w(html json)]
+  render_errors: [view: SmartGardenWeb.ErrorView, accepts: ~w(html json)],
+  pubsub_server: SmartGardenWeb.PubSub
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -24,4 +25,4 @@ config :logger, :console,
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

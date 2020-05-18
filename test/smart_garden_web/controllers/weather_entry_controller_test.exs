@@ -1,6 +1,6 @@
 defmodule SmartGardenWeb.WeatherEntriesControllerTest do
   use SmartGardenWeb.ConnCase
-  
+
   alias SmartGarden.Repo
   alias SmartGarden.Device
   alias SmartGarden.Interval
@@ -17,61 +17,80 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
     Repo.delete_all(WeatherEntry)
 
     changeset = %Interval{
-      name: "Wait 1000", 
+      name: "Wait 1000",
       value: 1000,
-      action: "polling", 
-      device: device, 
-      execution_schedule: "* * * * *"}
-    Repo.insert! changeset
-    
-    conn = post conn, device_weather_entries_path(conn, :create, device.id), w: @weather_entry_params
-    assert json_response(conn, 201) == %{
-      "action" => "polling",
-      "value" => 1000
+      action: "polling",
+      device: device,
+      execution_schedule: "* * * * *"
     }
+
+    Repo.insert!(changeset)
+
+    conn =
+      post(conn, device_weather_entries_path(conn, :create, device.id), w: @weather_entry_params)
+
+    assert json_response(conn, 201) == %{
+             "action" => "polling",
+             "value" => 1000
+           }
   end
 
-  test "does not create weather_entry as it detects a recent insert", %{conn: conn, device: device} do
+  test "does not create weather_entry as it detects a recent insert", %{
+    conn: conn,
+    device: device
+  } do
     Repo.delete_all(WeatherEntry)
 
     changeset = %Interval{
-      name: "Wait 1000", 
+      name: "Wait 1000",
       value: 1000,
-      action: "polling", 
-      device: device, 
-      execution_schedule: "* * * * *"}
-    Repo.insert! changeset
+      action: "polling",
+      device: device,
+      execution_schedule: "* * * * *"
+    }
 
-    conn = post(conn, device_weather_entries_path(conn, :create, device.id), w: @weather_entry_params)
+    Repo.insert!(changeset)
+
+    conn =
+      post(conn, device_weather_entries_path(conn, :create, device.id), w: @weather_entry_params)
+
     assert json_response(conn, 201) == %{
-      "action" => "polling",
-      "value" => 1000
-    }
+             "action" => "polling",
+             "value" => 1000
+           }
 
-    conn = post(conn, device_weather_entries_path(conn, :create, device.id), w: @weather_entry_params)
+    conn =
+      post(conn, device_weather_entries_path(conn, :create, device.id), w: @weather_entry_params)
+
     assert json_response(conn, 200) == %{
-      "action" => "polling",
-      "value" => 1000
-    }
+             "action" => "polling",
+             "value" => 1000
+           }
   end
 
   test "get weather_entry", %{conn: conn, device: device} do
-    weather_entry = Repo.insert!(%WeatherEntry{
-      moisture: 1000.0, 
-      temperature: 35.0, 
-      humidity: 30.0, 
-      device: device})
-    conn = get conn, device_weather_entries_path(conn, :show, device.id, weather_entry.id)
+    weather_entry =
+      Repo.insert!(%WeatherEntry{
+        moisture: 1000.0,
+        temperature: 35.0,
+        humidity: 30.0,
+        device: device
+      })
+
+    conn = get(conn, device_weather_entries_path(conn, :show, device.id, weather_entry.id))
     assert json_response(conn, 200) == weather_entry_json(weather_entry)
   end
 
   test "index weather_entries", %{conn: conn, device: device} do
-    weather_entry = Repo.insert!(%WeatherEntry{
-      moisture: 1000.0, 
-      temperature: 35.0, 
-      humidity: 30.0, 
-      device: device})
-    conn = get conn, device_weather_entries_path(conn, :index, device.id)
+    weather_entry =
+      Repo.insert!(%WeatherEntry{
+        moisture: 1000.0,
+        temperature: 35.0,
+        humidity: 30.0,
+        device: device
+      })
+
+    conn = get(conn, device_weather_entries_path(conn, :index, device.id))
     assert json_response(conn, 200) == %{"weatherEntries" => [weather_entry_json(weather_entry)]}
   end
 
@@ -83,8 +102,7 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
       "mainVoltage" => weather_entry.main_voltage,
       "secondaryVoltage" => weather_entry.secondary_voltage,
       "volume" => round(weather_entry.volume),
-      "createdAt" => NaiveDateTime.to_string weather_entry.inserted_at
+      "createdAt" => NaiveDateTime.to_string(weather_entry.inserted_at)
     }
   end
-
 end
