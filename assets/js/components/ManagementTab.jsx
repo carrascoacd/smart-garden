@@ -9,12 +9,18 @@ import React, { Component } from 'react';
 import SelectField from 'material-ui/SelectField';
 import Subheader from 'material-ui/Subheader';
 import TimePicker from 'material-ui/TimePicker';
+import TextField from 'material-ui/TextField';
+
+import {
+  Step,
+  Stepper,
+  StepButton,
+} from 'material-ui/Stepper';
 
 const actionMapping = {
   "open-valve" : 0,
-  "close-valve" : 1,
-  "reset" : 2,
-  "sleep" : 3
+  "reset" : 1,
+  "polling" : 2
 }
 
 const styles = {
@@ -34,7 +40,7 @@ const styles = {
   },
   toggle: {
     marginBottom: 16,
-  },
+  }
 }
 
 export default class ManagementTab extends Component {
@@ -42,7 +48,8 @@ export default class ManagementTab extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      interval: null
+      interval: null,
+      intervals: []
     }
   }
 
@@ -54,9 +61,16 @@ export default class ManagementTab extends Component {
     fetch(`/api/devices/${this.props.device.id}/intervals`).then((response) => {
       return response.json();
     }).then((data) => {
-      let intervalData = data.intervals[0];
-      let interval = this.buildIntervalObject(intervalData)
-      this.setState({ interval: interval })
+      let intervals = data.intervals.map(function(intervalData){
+        return this.buildIntervalObject(intervalData)
+      }, this)
+
+      // Sort by index
+      intervals.sort(function(a, b){
+        return a.index > b.index;
+      })
+
+      this.setState({ interval: intervals[0], intervals: intervals })
     }).catch((err) => {
       console.log(err)
     });
@@ -72,7 +86,8 @@ export default class ManagementTab extends Component {
         value: interval.value * 60 * 1000, 
         execution_schedule: executionSchedule,
         active: interval.days.length > 0,
-        action: interval.action
+        action: interval.action,
+        index: interval.index
       }
     })
     let headers = new Headers()
@@ -109,18 +124,31 @@ export default class ManagementTab extends Component {
       date: date,
       value: interval.value / 60 / 1000,
       days: days,
-      action: interval.action
+      action: interval.action,
+      index: interval.index
     }
   }
 
-  onChangePollingValue(event, value) {
-    this.state.interval.value = value
+  onChangeIndex(event, value) {
+    // Exchange indexes
+    value = value - 1 // To keep the 0 base index
+    let previousInterval = this.state.intervals.find(function(interval){
+      return interval.index == value
+    })
+    previousInterval.index = this.state.interval.index
+    this.state.interval.index = value
+
+    // Sort by index
+    this.state.intervals.sort(function(a, b){
+      return a.index > b.index;
+    })
+
     this.updateInterval(this.state.interval, (data) => {
-      this.setState({interval: this.state.interval})
+      this.setState({interval: this.state.interval, intervals: this.state.intervals})
     })
   }
 
-  onChangeControlValue(event, value) {
+  onChangeValue(event, value) {
     this.state.interval.value = value
     this.updateInterval(this.state.interval, (data) => {
       this.setState({interval: this.state.interval})
@@ -137,9 +165,14 @@ export default class ManagementTab extends Component {
   onChangeAction(event, value) {
     // Invert to get the key by value
     let action = (_.invert(actionMapping))[value];
-    this.state.interval.action = action
-    this.updateInterval(this.state.interval, (data) => {
-      this.setState({interval: this.state.interval})
+
+    let interval = this.state.intervals.find(function(interval){
+      return interval.action == action
+    })
+
+    // This is a workaround to force the duration picker to be updated
+    this.setState({interval: null}, function(){
+      this.setState({interval: interval})
     })
   }
 
@@ -159,9 +192,29 @@ export default class ManagementTab extends Component {
   render() {
     return (
       <div style={styles.container}>
+      <Subheader>Order</Subheader>
+      {
+        this.state.interval &&
         <List style={styles.item}>
-          <Subheader>Next action to execute</Subheader>
-
+          <div style={{width: '100%', maxWidth: 700, margin: 'auto'}}>
+            <Stepper linear={false} activeStep={this.state.interval.index}>
+            {
+              this.state.intervals.map(function(interval, i){
+                return (
+                  <Step key={i} >
+                    <StepButton>
+                      { interval.action }
+                    </StepButton>
+                  </Step>
+                )
+              }, this)
+            }
+            </Stepper>
+          </div>
+        </List>
+        }
+        <List style={styles.item}>
+          <Subheader>Action</Subheader>
           {
             this.state.interval &&
             <ListItem>
@@ -170,42 +223,42 @@ export default class ManagementTab extends Component {
                 onChange={this.onChangeAction.bind(this)}
               >
                 <MenuItem value={0} primaryText="Open valve" />
-                <MenuItem value={1} primaryText="Close valve" />
-                <MenuItem value={2} primaryText="Reset" />
-                <MenuItem value={3} primaryText="Sleep" />
+                <MenuItem value={1} primaryText="Reset" />
+                <MenuItem value={2} primaryText="Polling" />
               </SelectField>
             </ListItem>
           }
         </List>
         <Divider />
         <List style={styles.item}>
-          <Subheader>Polling interval</Subheader>
-          {this.state.interval &&
+          <Subheader>Duration</Subheader>
+          {
+          this.state.interval &&
             <ListItem>
               <IntervalSlider 
                 maxValue={480} 
                 unit="min" 
                 value={this.state.interval.value} 
-                onChange={this.onChangePollingValue.bind(this)} />
+                onChange={this.onChangeValue.bind(this)} />
             </ListItem>
           }
         </List>
         <List style={styles.item}>
-          <Subheader>Open valve time</Subheader>
+          <Subheader>Index</Subheader>
           {
             this.state.interval &&
             <ListItem>
-              <IntervalSlider 
-                maxValue={200} 
-                unit="min" 
-                value={this.state.interval.value} 
-                onChange={this.onChangeControlValue.bind(this)} />
+              <TextField
+                id="index"
+                value={this.state.interval.index + 1}
+                onChange={this.onChangeIndex.bind(this)}
+              />
             </ListItem>
           }
         </List>
         <Divider />
         <List style={styles.item}>
-          <Subheader>Open valve hour</Subheader>
+          <Subheader>Hour</Subheader>
           {
             this.state.interval &&
             <ListItem>
@@ -218,7 +271,7 @@ export default class ManagementTab extends Component {
         </List>
         <Divider />
         <List style={styles.item}>
-          <Subheader>Open valve days</Subheader>
+          <Subheader>Days</Subheader>
           {this.state.interval &&
             ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(function (day, i) {
               return (

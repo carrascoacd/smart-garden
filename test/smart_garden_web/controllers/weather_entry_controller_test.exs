@@ -30,7 +30,7 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
       post(conn, device_weather_entries_path(conn, :create, device.id), w: @weather_entry_params)
 
     assert json_response(conn, 201) == %{
-             "action" => "polling",
+             "action" => "open-valve",
              "value" => 1000
            }
   end
@@ -55,7 +55,7 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
       post(conn, device_weather_entries_path(conn, :create, device.id), w: @weather_entry_params)
 
     assert json_response(conn, 201) == %{
-             "action" => "polling",
+             "action" => "open-valve",
              "value" => 1000
            }
 
@@ -63,7 +63,7 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
       post(conn, device_weather_entries_path(conn, :create, device.id), w: @weather_entry_params)
 
     assert json_response(conn, 200) == %{
-             "action" => "polling",
+             "action" => "open-valve",
              "value" => 1000
            }
   end
