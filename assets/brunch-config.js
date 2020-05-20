@@ -61,7 +61,8 @@ exports.config = {
     enabled: true,
     globals: {
       _: 'underscore',
-      moment: 'moment'
+      moment: 'moment',
+      cron_parser: 'cron-parser'
     },
   }
 };

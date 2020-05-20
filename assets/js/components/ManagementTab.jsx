@@ -77,15 +77,10 @@ export default class ManagementTab extends Component {
   }
 
   updateInterval(interval, callback) {
-    let executionSchedule = this.buildCronExpression(
-      new Date(interval.date.getTime()), 
-      interval.days
-    )
     let bodyParams = JSON.stringify({
       interval: {
         value: interval.value * 60 * 1000, 
-        execution_schedule: executionSchedule,
-        active: interval.days.length > 0,
+        execution_schedule: interval.execution_schedule,
         action: interval.action,
         index: interval.index
       }
@@ -112,20 +107,12 @@ export default class ManagementTab extends Component {
   }
 
   buildIntervalObject(interval) {
-    let cronValues = interval.execution_schedule.split(" ")
-    let date = new Date()
-    let hour = (parseInt(cronValues[1]) || 0) - date.getTimezoneOffset() / 60
-    let minutes = parseInt(cronValues[0]) || 0
-    date.setHours(hour, minutes)
-    let days = _.map(cronValues[4].split(","), function (n) { return parseInt(n) })
-    days =  _.filter(days, function(n){ return !isNaN(n) })
     return {
       id: interval.id,
-      date: date,
       value: interval.value / 60 / 1000,
-      days: days,
       action: interval.action,
-      index: interval.index
+      index: interval.index,
+      execution_schedule: interval.execution_schedule
     }
   }
 
@@ -157,8 +144,9 @@ export default class ManagementTab extends Component {
 
   onChangeControlHour(event, date) {
     this.state.interval.date = date
+    this.setState({interval: this.state.interval})
     this.updateInterval(this.state.interval, (data) => {
-      this.setState({interval: this.state.interval})
+      
     })
   }
 
@@ -176,17 +164,20 @@ export default class ManagementTab extends Component {
     })
   }
 
-  onCheckControlDay(event, isInputChecked) {
-    let day = parseInt(event.target.value)
-    if (isInputChecked == true){
-      this.state.interval.days.push(day)
-    }
-    else {
-      this.state.interval.days.splice(this.state.interval.days.indexOf(day), 1)
-    }
-    this.updateInterval(this.state.interval, (data) => {
-      this.setState({interval: this.state.interval})
+  onChangeExecutionSchedule(event, value){
+    this.state.interval.execution_schedule = value
+    this.setState({interval: this.state.interval}, function(){
+      this.updateInterval(this.state.interval)
     })
+  }
+
+  getNextExecution(){
+    try{
+      let date_utc = cron_parser.parseExpression(this.state.interval.execution_schedule).next().toString()
+      return moment(date_utc).tz("Europe/Madrid").format("dd HH:mm");
+    } catch (err) {
+      return "Format error"
+    }
   }
 
   render() {
@@ -257,40 +248,22 @@ export default class ManagementTab extends Component {
           }
         </List>
         <Divider />
-        <List style={styles.item}>
-          <Subheader>Hour</Subheader>
-          {
-            this.state.interval &&
+        
+        {
+          this.state.interval &&
+          <List style={styles.item}>
+            <Subheader>Next: { this.getNextExecution() }</Subheader> 
+            <Subheader>second | minute | hour | day (m) | month | day (w) </Subheader> 
             <ListItem>
-              <TimePicker 
-                onChange={this.onChangeControlHour.bind(this)}
-                name="hour" 
-                value={this.state.interval.date} />
+              <TextField
+                id="schedule"
+                value={this.state.interval.execution_schedule}
+                onChange={this.onChangeExecutionSchedule.bind(this)}
+              />
             </ListItem>
-          }
-        </List>
-        <Divider />
-        <List style={styles.item}>
-          <Subheader>Days</Subheader>
-          {this.state.interval &&
-            ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(function (day, i) {
-              return (
-                <ListItem
-                  key={i}
-                  leftCheckbox={
-                    <Checkbox
-                      checkedIcon={<ActionFavorite />}
-                      uncheckedIcon={<ActionFavoriteBorder />}
-                      label={day}
-                      value={i + 1}
-                      onCheck={this.onCheckControlDay.bind(this)}
-                      checked={this.state.interval.days.includes(i + 1)}
-                    />}
-                />
-              )
-            }.bind(this))
-          }
-        </List>
+          </List>
+        }
+       
       </div>
     );
   }

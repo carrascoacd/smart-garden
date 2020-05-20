@@ -24,7 +24,14 @@ defmodule SmartGardenWeb.IntervalDeviceControllerTest do
   end
 
   test "get interval", %{conn: conn, device: device} do
-    changeset = %Interval{name: "water", value: 100, device: device, action: "open-valve", index: 0}
+    changeset = %Interval{
+      name: "water",
+      value: 100,
+      device: device,
+      action: "open-valve",
+      index: 0
+    }
+
     interval = Repo.insert!(changeset)
     conn = get(conn, device_interval_path(conn, :show, device.id, interval.id))
     assert json_response(conn, 200) == interval_json(interval, %{execution_schedule: nil})
@@ -66,7 +73,7 @@ defmodule SmartGardenWeb.IntervalDeviceControllerTest do
       "execution_schedule" => execution_schedule,
       "active" => interval.active,
       "force_open" => interval.force_open,
-      "index" => interval.index,
+      "index" => interval.index
     }
   end
 end

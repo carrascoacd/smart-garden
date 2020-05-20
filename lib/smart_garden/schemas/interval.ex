@@ -29,7 +29,16 @@ defmodule SmartGarden.Interval do
 
   def changeset(%Interval{} = interval, attrs) do
     interval
-    |> cast(attrs, [:name, :value, :action, :execution_schedule, :device_id, :active, :force_open, :index])
+    |> cast(attrs, [
+      :name,
+      :value,
+      :action,
+      :execution_schedule,
+      :device_id,
+      :active,
+      :force_open,
+      :index
+    ])
     |> validate_required([:name, :value, :action, :execution_schedule, :device_id, :index])
     |> validate_inclusion(:action, ["open-valve", "close-valve", "reset", "sleep", "polling"])
   end

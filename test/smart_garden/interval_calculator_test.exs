@@ -1,6 +1,6 @@
 defmodule SmartGarden.IntervalCalculatorTest do
   alias SmartGarden.{Interval, Device, Repo, IntervalCalculator}
-  
+
   use SmartGarden.DataCase
 
   @one_hour_min 60
@@ -8,7 +8,8 @@ defmodule SmartGarden.IntervalCalculatorTest do
   @interval %Interval{
     name: "action",
     action: "polling",
-    value: 2 * @one_hour_min * 60 * 1000 # 2 Hours
+    # 2 Hours
+    value: 2 * @one_hour_min * 60 * 1000
   }
 
   setup do
@@ -18,22 +19,23 @@ defmodule SmartGarden.IntervalCalculatorTest do
   end
 
   test "returns the first interval by priority if matches", %{
-    current_time: current_time, device: device
+    current_time: current_time,
+    device: device
   } do
     Repo.insert!(%Interval{
-      @interval |
-      name: "interval-1",
-      index: 0,
-      execution_schedule: "* #{current_time.hour} * * *",
-      device_id: device.id
+      @interval
+      | name: "interval-1",
+        index: 0,
+        execution_schedule: "* #{current_time.hour} * * *",
+        device_id: device.id
     })
 
     Repo.insert!(%Interval{
-      @interval |
-      name: "interval-2",
-      index: 1,
-      execution_schedule: "* #{current_time.hour - 1} * * *",
-      device_id: device.id
+      @interval
+      | name: "interval-2",
+        index: 1,
+        execution_schedule: "* #{current_time.hour - 1} * * *",
+        device_id: device.id
     })
 
     next_interval = IntervalCalculator.next_interval_for(device, nil)
@@ -41,22 +43,23 @@ defmodule SmartGarden.IntervalCalculatorTest do
   end
 
   test "returns the second interval by priority", %{
-    current_time: current_time, device: device
+    current_time: current_time,
+    device: device
   } do
     Repo.insert!(%Interval{
-      @interval |
-      name: "interval-1",
-      index: 1,
-      execution_schedule: "* #{current_time.hour} * * *",
-      device_id: device.id
+      @interval
+      | name: "interval-1",
+        index: 1,
+        execution_schedule: "* #{current_time.hour} * * *",
+        device_id: device.id
     })
 
     Repo.insert!(%Interval{
-      @interval |
-      name: "interval-2",
-      index: 0,
-      execution_schedule: "* #{current_time.hour} * * *",
-      device_id: device.id
+      @interval
+      | name: "interval-2",
+        index: 0,
+        execution_schedule: "* #{current_time.hour} * * *",
+        device_id: device.id
     })
 
     next_interval = IntervalCalculator.next_interval_for(device, nil)

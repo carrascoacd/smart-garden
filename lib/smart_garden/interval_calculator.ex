@@ -1,12 +1,11 @@
 defmodule SmartGarden.IntervalCalculator do
   alias Crontab.CronExpression.Parser, as: CrontabParser
-  alias Crontab.CronExpression.Parser, as: CrontabParser
   alias SmartGarden.Interval
 
   def next_interval_for(device, _state) do
     Interval.get_all_by_device(device.id)
-      |> Enum.sort(&(&1.index < &2.index))
-      |> Enum.find(&choose_interval/1)
+    |> Enum.sort(&(&1.index < &2.index))
+    |> Enum.find(&choose_interval/1)
   end
 
   defp choose_interval(interval) do
