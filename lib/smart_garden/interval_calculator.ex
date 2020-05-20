@@ -1,29 +1,16 @@
 defmodule SmartGarden.IntervalCalculator do
   alias Crontab.CronExpression.Parser, as: CrontabParser
   alias Crontab.CronExpression.Parser, as: CrontabParser
+  alias SmartGarden.Interval
 
-  import Ecto.Query
-
-  def next_interval_for(device, state) do
-    interval =
-      SmartGarden.Repo.one(from(i in SmartGarden.Interval, where: i.device_id == ^device.id))
-
-    choose_interval(interval, state)
+  def next_interval_for(device, _state) do
+    Interval.get_all_by_device(device.id)
+      |> Enum.sort(&(&1.index < &2.index))
+      |> Enum.find(&choose_interval/1)
   end
 
-  defp choose_interval(interval, state) do
-    matches_date? = interval_matches_date?(interval, NaiveDateTime.utc_now())
-
-    case {matches_date?, state} do
-      {false, "open"} ->
-        %{interval | action: "close-valve"}
-
-      {true, "close"} ->
-        %{interval | action: "open-valve"}
-
-      _otherwise ->
-        interval
-    end
+  defp choose_interval(interval) do
+    interval_matches_date?(interval, NaiveDateTime.utc_now())
   end
 
   defp interval_matches_date?(interval, date) do

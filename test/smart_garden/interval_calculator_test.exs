@@ -1,59 +1,65 @@
 defmodule SmartGarden.IntervalCalculatorTest do
+  alias SmartGarden.{Interval, Device, Repo, IntervalCalculator}
+  
   use SmartGarden.DataCase
 
+  @one_hour_min 60
+  @device %Device{name: "Arduino"}
+  @interval %Interval{
+    name: "action",
+    action: "polling",
+    value: 2 * @one_hour_min * 60 * 1000 # 2 Hours
+  }
+
   setup do
-    current_time = DateTime.utc_now() |> DateTime.to_time()
-    {:ok, %{current_time: current_time}}
+    device = Repo.insert!(@device)
+    current_time = DateTime.to_time(DateTime.utc_now())
+    {:ok, %{current_time: current_time, device: device}}
   end
 
-  test "returns the action when the date does not matche and the state is not open", %{
-    current_time: current_time
+  test "returns the first interval by priority if matches", %{
+    current_time: current_time, device: device
   } do
-    device = SmartGarden.Repo.insert!(%SmartGarden.Device{name: "Arduino"})
-
-    SmartGarden.Repo.insert!(%SmartGarden.Interval{
-      device: device,
-      name: "action",
-      action: "polling",
-      value: 0,
-      execution_schedule: "#{current_time.minute} #{current_time.hour - 1} * * *"
+    Repo.insert!(%Interval{
+      @interval |
+      name: "interval-1",
+      index: 0,
+      execution_schedule: "* #{current_time.hour} * * *",
+      device_id: device.id
     })
 
-    next_interval = SmartGarden.IntervalCalculator.next_interval_for(device, "close")
-    assert next_interval.action == "polling"
+    Repo.insert!(%Interval{
+      @interval |
+      name: "interval-2",
+      index: 1,
+      execution_schedule: "* #{current_time.hour - 1} * * *",
+      device_id: device.id
+    })
+
+    next_interval = IntervalCalculator.next_interval_for(device, nil)
+    assert next_interval.name == "interval-1"
   end
 
-  test "returns the action when the date does not match and the state is open", %{
-    current_time: current_time
+  test "returns the second interval by priority", %{
+    current_time: current_time, device: device
   } do
-    device = SmartGarden.Repo.insert!(%SmartGarden.Device{name: "Arduino"})
-
-    SmartGarden.Repo.insert!(%SmartGarden.Interval{
-      device: device,
-      name: "action",
-      action: "open-valve",
-      value: 0,
-      execution_schedule: "#{current_time.minute} #{current_time.hour - 1} * * *"
+    Repo.insert!(%Interval{
+      @interval |
+      name: "interval-1",
+      index: 1,
+      execution_schedule: "* #{current_time.hour} * * *",
+      device_id: device.id
     })
 
-    next_interval = SmartGarden.IntervalCalculator.next_interval_for(device, "open")
-    assert next_interval.action == "close-valve"
-  end
-
-  test "returns the action open-valve when the date matches and the state is close", %{
-    current_time: current_time
-  } do
-    device = SmartGarden.Repo.insert!(%SmartGarden.Device{name: "Arduino"})
-
-    SmartGarden.Repo.insert!(%SmartGarden.Interval{
-      device: device,
-      name: "action",
-      action: "polling",
-      value: 0,
-      execution_schedule: "#{current_time.minute} #{current_time.hour} * * *"
+    Repo.insert!(%Interval{
+      @interval |
+      name: "interval-2",
+      index: 0,
+      execution_schedule: "* #{current_time.hour} * * *",
+      device_id: device.id
     })
 
-    next_interval = SmartGarden.IntervalCalculator.next_interval_for(device, "close")
-    assert next_interval.action == "open-valve"
+    next_interval = IntervalCalculator.next_interval_for(device, nil)
+    assert next_interval.name == "interval-2"
   end
 end
