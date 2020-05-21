@@ -110,6 +110,7 @@ export default class ManagementTab extends Component {
   }
 
   onChangeIndex(event, value) {
+    console.log(value)
     // Exchange indexes
     let previousInterval = this.state.intervals.find(function(interval){
       return interval.index == value
@@ -219,7 +220,7 @@ export default class ManagementTab extends Component {
                 {
                   this.state.intervals.map(function(interval, i){
                     return (
-                      <MenuItem value={interval.index} primaryText={ interval.index + 1 } />
+                      <MenuItem value={interval.index} primaryText={ interval.index.toString() } />
                     )
                   }, this)
                 }
