@@ -1,21 +1,11 @@
 import { List, ListItem } from 'material-ui/List';
-import ActionFavorite from 'material-ui/svg-icons/action/favorite';
-import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
-import Checkbox from 'material-ui/Checkbox';
 import Divider from 'material-ui/Divider';
 import IntervalSlider from './IntervalSlider.jsx';
 import MenuItem from 'material-ui/MenuItem';
 import React, { Component } from 'react';
 import SelectField from 'material-ui/SelectField';
 import Subheader from 'material-ui/Subheader';
-import TimePicker from 'material-ui/TimePicker';
 import TextField from 'material-ui/TextField';
-
-import {
-  Step,
-  Stepper,
-  StepButton,
-} from 'material-ui/Stepper';
 
 const actionMapping = {
   "open-valve" : 0,
@@ -40,6 +30,9 @@ const styles = {
   },
   toggle: {
     marginBottom: 16,
+  },
+  order: {
+    marginLeft: "1em"
   }
 }
 
@@ -188,20 +181,14 @@ export default class ManagementTab extends Component {
       {
         this.state.interval &&
         <List style={styles.item}>
-          <div style={{width: '100%', maxWidth: 700, margin: 'auto'}}>
-            <Stepper linear={false} activeStep={this.state.interval.index}>
+          <div style={styles.order}>
             {
               this.state.intervals.map(function(interval, i){
                 return (
-                  <Step key={i} >
-                    <StepButton>
-                      { interval.action }
-                    </StepButton>
-                  </Step>
+                    <span style={styles.order}> ➡️ {interval.action}</span>
                 )
               }, this)
             }
-            </Stepper>
           </div>
         </List>
         }
