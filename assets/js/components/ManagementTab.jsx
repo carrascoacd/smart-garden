@@ -167,6 +167,7 @@ export default class ManagementTab extends Component {
   onChangeExecutionSchedule(event, value){
     this.state.interval.execution_schedule = value
     this.setState({interval: this.state.interval}, function(){
+      this.state.interval.execution_schedule = value.trim()
       this.updateInterval(this.state.interval)
     })
   }
