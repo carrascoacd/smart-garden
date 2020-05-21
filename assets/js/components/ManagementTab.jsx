@@ -111,10 +111,10 @@ export default class ManagementTab extends Component {
 
   onChangeIndex(event, value) {
     // Exchange indexes
-    value = value - 1 // To keep the 0 base index
     let previousInterval = this.state.intervals.find(function(interval){
       return interval.index == value
     })
+    
     previousInterval.index = this.state.interval.index
     this.state.interval.index = value
 
@@ -177,21 +177,6 @@ export default class ManagementTab extends Component {
   render() {
     return (
       <div style={styles.container}>
-      <Subheader>Order</Subheader>
-      {
-        this.state.interval &&
-        <List style={styles.item}>
-          <div style={styles.order}>
-            {
-              this.state.intervals.map(function(interval, i){
-                return (
-                    <span style={styles.order}> ➡️ {interval.action}</span>
-                )
-              }, this)
-            }
-          </div>
-        </List>
-        }
         <List style={styles.item}>
           <Subheader>Action</Subheader>
           {
@@ -227,11 +212,18 @@ export default class ManagementTab extends Component {
           {
             this.state.interval &&
             <ListItem>
-              <TextField
-                id="index"
-                value={this.state.interval.index + 1}
+              <SelectField
+                value={this.state.interval.index}
                 onChange={this.onChangeIndex.bind(this)}
-              />
+              >
+                {
+                  this.state.intervals.map(function(interval, i){
+                    return (
+                      <MenuItem value={interval.index} primaryText={ interval.index + 1 } />
+                    )
+                  }, this)
+                }
+              </SelectField>
             </ListItem>
           }
         </List>
