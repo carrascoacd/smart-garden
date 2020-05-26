@@ -85,7 +85,7 @@ export default class ManagementTab extends Component {
       headers: headers,
       body: bodyParams
     }).then((data) => {
-      callback(data)
+      if (callback != null) callback(data)
     }).catch((err) => {
       console.log(err)
     })
@@ -116,16 +116,23 @@ export default class ManagementTab extends Component {
       return interval.index == value
     })
     
-    previousInterval.index = this.state.interval.index
-    this.state.interval.index = value
-
-    // Sort by index
-    this.state.intervals.sort(function(a, b){
-      return a.index > b.index;
-    })
-
-    this.updateInterval(this.state.interval, (data) => {
-      this.setState({interval: this.state.interval, intervals: this.state.intervals})
+    previousInterval.index = -1 // Temporal to switch
+    this.updateInterval(previousInterval, (data) => {
+      let previousIntervalIndex = this.state.interval.index
+      this.state.interval.index = value
+  
+      this.updateInterval(this.state.interval, (data) => {        
+        // Remove the -1 and set the new index
+        previousInterval.index = previousIntervalIndex
+        this.updateInterval(previousInterval, (data) => {
+          // Sort by index
+          this.state.intervals.sort(function(a, b){
+            return a.index > b.index;
+          })
+          
+          this.setState({interval: this.state.interval, intervals: this.state.intervals})
+        })
+      })
     })
   }
 
@@ -179,6 +186,17 @@ export default class ManagementTab extends Component {
     return (
       <div style={styles.container}>
         <List style={styles.item}>
+          <ListItem>
+          {
+            this.state.intervals.map(function(interval, i){
+              return (
+                <span key={i}> ➟ {interval.action}</span>
+              )
+            }, this)
+          }
+          </ListItem>
+        </List>
+        <List style={styles.item}>
           <Subheader>Action</Subheader>
           {
             this.state.interval &&
@@ -220,7 +238,7 @@ export default class ManagementTab extends Component {
                 {
                   this.state.intervals.map(function(interval, i){
                     return (
-                      <MenuItem value={interval.index} primaryText={ interval.index.toString() } />
+                      <MenuItem value={interval.index} primaryText={interval.index.toString()} key={i} />
                     )
                   }, this)
                 }

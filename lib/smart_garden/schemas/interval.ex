@@ -41,5 +41,6 @@ defmodule SmartGarden.Interval do
     ])
     |> validate_required([:name, :value, :action, :execution_schedule, :device_id, :index])
     |> validate_inclusion(:action, ["open-valve", "close-valve", "reset", "sleep", "polling"])
+    |> unique_constraint([:device_id, :index])
   end
 end
