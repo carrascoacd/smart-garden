@@ -26,10 +26,11 @@ defmodule SmartGardenWeb.WeatherEntriesController do
       "moisture" => Map.get(weather_entry_params, "m"),
       "humidity" => Map.get(weather_entry_params, "h"),
       "temperature" => Map.get(weather_entry_params, "t"),
+      "soil_temperature" => Map.get(weather_entry_params, "st", 0),
       "main_voltage" => Map.get(weather_entry_params, "mv", 0),
       "secondary_voltage" => Map.get(weather_entry_params, "sv", 0),
       "volume" => Map.get(weather_entry_params, "v", 0.0),
-      "state" => Map.get(weather_entry_params, "st", 0),
+      "state" => Map.get(weather_entry_params, "s", 0),
       "device_id" => device_id
     }
 

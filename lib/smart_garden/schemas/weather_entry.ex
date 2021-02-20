@@ -9,6 +9,7 @@ defmodule SmartGarden.WeatherEntry do
   @allowed_params [
     :moisture,
     :temperature,
+    :soil_temperature,
     :humidity,
     :device_id,
     :main_voltage,
@@ -20,6 +21,7 @@ defmodule SmartGarden.WeatherEntry do
   schema "weather_entries" do
     field(:moisture, :float, default: 0.0)
     field(:temperature, :float, default: 0.0)
+    field(:soil_temperature, :float, default: 0.0)
     field(:humidity, :float, default: 0.0)
     field(:main_voltage, :integer, default: 0)
     field(:secondary_voltage, :integer, default: 0)

@@ -46,7 +46,8 @@ export default class DeviceTable extends React.Component {
             <TableRow>
               <TableHeaderColumn style={styles.createdAtColumn}>At</TableHeaderColumn>
               <TableHeaderColumn style={styles.dataColumn}>M</TableHeaderColumn>
-              <TableHeaderColumn style={styles.dataColumn}>C º</TableHeaderColumn>
+              <TableHeaderColumn style={styles.dataColumn}>T º</TableHeaderColumn>
+              <TableHeaderColumn style={styles.dataColumn}>ST º</TableHeaderColumn>
               <TableHeaderColumn style={styles.dataColumn}>H %</TableHeaderColumn>
               <TableHeaderColumn style={styles.dataColumn}>Main V</TableHeaderColumn>
               <TableHeaderColumn style={styles.dataColumn}>Sec V</TableHeaderColumn>
@@ -60,6 +61,7 @@ export default class DeviceTable extends React.Component {
                     <TableRowColumn style={styles.createdAtColumn}>{moment(entry.createdAt).add(-(new Date).getTimezoneOffset(), 'minutes').format('D/MM - HH:mm')}</TableRowColumn>
                     <TableRowColumn style={styles.dataColumn}>{entry.moisture}</TableRowColumn>
                     <TableRowColumn style={styles.dataColumn}>{entry.temperature}</TableRowColumn>
+                    <TableRowColumn style={styles.dataColumn}>{entry.soilTemperature}</TableRowColumn>
                     <TableRowColumn style={styles.dataColumn}>{entry.humidity}</TableRowColumn>  
                     <TableRowColumn style={styles.dataColumn}>{entry.mainVoltage}</TableRowColumn>
                     <TableRowColumn style={styles.dataColumn}>{entry.secondaryVoltage}</TableRowColumn>

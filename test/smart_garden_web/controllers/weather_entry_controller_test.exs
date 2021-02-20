@@ -6,7 +6,7 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
   alias SmartGarden.Interval
   alias SmartGarden.WeatherEntry
 
-  @weather_entry_params %{m: 1000, h: 99, t: 35, mv: 3600, sv: 3500, v: 50, st: 0}
+  @weather_entry_params %{m: 1000, h: 99, t: 35, st: 34, mv: 3600, sv: 3500, v: 50, s: 0}
 
   setup do
     device = Repo.insert!(%Device{name: "Arduino Device"})
@@ -99,6 +99,7 @@ defmodule SmartGardenWeb.WeatherEntriesControllerTest do
       "moisture" => round(weather_entry.moisture),
       "humidity" => round(weather_entry.humidity),
       "temperature" => round(weather_entry.temperature),
+      "soilTemperature" => round(weather_entry.soil_temperature),
       "mainVoltage" => weather_entry.main_voltage,
       "secondaryVoltage" => weather_entry.secondary_voltage,
       "volume" => round(weather_entry.volume),
