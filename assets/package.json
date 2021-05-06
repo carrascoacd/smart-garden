@@ -25,7 +25,7 @@
     "react-faux-dom": "^2.5.0",
     "react-responsive": "^1.2.10",
     "react-tap-event-plugin": "^2.0.1",
-    "underscore": "^1.8.3",
+    "underscore": "^1.12.1",
     "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
