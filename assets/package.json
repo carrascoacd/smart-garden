@@ -29,7 +29,7 @@
     "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
-    "babel-brunch": "^6.1.1",
+    "babel-brunch": "^7.0.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "clean-css-brunch": "2.10.0",
